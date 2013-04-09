@@ -1,0 +1,9 @@
+<Modules>
+  <Module PersistentId="282B657C-8F3B-4D93-BAFA-3F68B83E13C5" ModuleId="IronC--Compiler" />
+  <Module PersistentId="1D620BC3-9B4F-4421-8E63-A21BEB709C25" ModuleId="IronC--Lexical" />
+  <Module PersistentId="EB0074A6-77D7-4744-A324-CC5E36FB0CFD" ModuleId="IronC--Syntax" />
+  <Module PersistentId="5714AC39-D06B-44AE-9E3F-4220440B7174" ModuleId="IronC--Semantics" />
+  <Module PersistentId="EA97CAA9-DE96-4786-B2D5-C94300BE7E23" ModuleId="IronC--Generator" />
+  <Module PersistentId="B4FCAA32-74DB-4399-9A0D-966A916D9F3E" ModuleId="IronC--IDE" />
+  <Module PersistentId="10ED6241-707E-4A97-8805-565E7EE8428E" ModuleId="IronC--UnitTests" />
+</Modules>
