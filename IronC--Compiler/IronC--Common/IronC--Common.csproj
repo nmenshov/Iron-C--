@@ -50,6 +50,12 @@
     <Compile Include="Lexis\Terminal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SymbolType.cs" />
+    <Compile Include="Trees\Attribute.cs" />
+    <Compile Include="Trees\IAttribute.cs" />
+    <Compile Include="Trees\INode.cs" />
+    <Compile Include="Trees\ITree.cs" />
+    <Compile Include="Trees\Node.cs" />
+    <Compile Include="Trees\Tree.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
