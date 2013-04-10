@@ -1,14 +1,17 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using IronC__Generator;
 
 namespace IronC__UnitTests
 {
     [TestClass]
-    public class UnitTest1
+    public class GeneratorUnitTests
     {
         [TestMethod]
-        public void TestMethod1()
+        public void Test1()
         {
+            var g = new CodeGenerator();
+            g.Generate();
         }
     }
 }

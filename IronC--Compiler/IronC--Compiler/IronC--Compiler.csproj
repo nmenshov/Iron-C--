@@ -47,6 +47,24 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IronC--Generator\IronC--Generator.csproj">
+      <Project>{ea97caa9-de96-4786-b2d5-c94300be7e23}</Project>
+      <Name>IronC--Generator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IronC--Lexical\IronC--Lexical.csproj">
+      <Project>{1d620bc3-9b4f-4421-8e63-a21beb709c25}</Project>
+      <Name>IronC--Lexical</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IronC--Semantics\IronC--Semantics.csproj">
+      <Project>{5714ac39-d06b-44ae-9e3f-4220440b7174}</Project>
+      <Name>IronC--Semantics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IronC--Syntax\IronC--Syntax.csproj">
+      <Project>{eb0074a6-77d7-4744-a324-cc5e36fb0cfd}</Project>
+      <Name>IronC--Syntax</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
