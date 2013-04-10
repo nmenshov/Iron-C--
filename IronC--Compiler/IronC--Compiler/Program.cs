@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IronC__Generator;
+using IronC__Lexical;
 
 namespace IronC__Compiler
 {
@@ -21,6 +22,8 @@ namespace IronC__Compiler
             switch (choose)
             {
                 case 1:
+                    var la = new LexicalAnalyzer(null);
+                    var tokens = la.Convert("program text");
                     break;
 
                 case 2:

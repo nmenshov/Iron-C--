@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{282B657C-8F3B-4D93-BAFA-3F68B83E13C5}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{C242A6BD-124C-4C54-995D-01379FF4F1E8}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IronC__Compiler</RootNamespace>
-    <AssemblyName>IronC--Compiler</AssemblyName>
+    <RootNamespace>IronC__Common</RootNamespace>
+    <AssemblyName>IronC--Common</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -41,34 +39,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Grammar.cs" />
+    <Compile Include="Lexis\EndSymbol.cs" />
+    <Compile Include="Lexis\Epsilon.cs" />
+    <Compile Include="Lexis\Id.cs" />
+    <Compile Include="Lexis\NotTerminal.cs" />
+    <Compile Include="Lexis\Num.cs" />
+    <Compile Include="Lexis\Symbol.cs" />
+    <Compile Include="Lexis\Terminal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SymbolType.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\IronC--Common\IronC--Common.csproj">
-      <Project>{C242A6BD-124C-4C54-995D-01379FF4F1E8}</Project>
-      <Name>IronC--Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IronC--Generator\IronC--Generator.csproj">
-      <Project>{ea97caa9-de96-4786-b2d5-c94300be7e23}</Project>
-      <Name>IronC--Generator</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IronC--Lexical\IronC--Lexical.csproj">
-      <Project>{1d620bc3-9b4f-4421-8e63-a21beb709c25}</Project>
-      <Name>IronC--Lexical</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IronC--Semantics\IronC--Semantics.csproj">
-      <Project>{5714ac39-d06b-44ae-9e3f-4220440b7174}</Project>
-      <Name>IronC--Semantics</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IronC--Syntax\IronC--Syntax.csproj">
-      <Project>{eb0074a6-77d7-4744-a324-cc5e36fb0cfd}</Project>
-      <Name>IronC--Syntax</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

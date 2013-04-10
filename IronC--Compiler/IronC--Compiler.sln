@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronC--IDE", "IronC--IDE\Ir
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronC--UnitTests", "IronC--UnitTests\IronC--UnitTests.csproj", "{10ED6241-707E-4A97-8805-565E7EE8428E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronC--Common", "IronC--Common\IronC--Common.csproj", "{C242A6BD-124C-4C54-995D-01379FF4F1E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{10ED6241-707E-4A97-8805-565E7EE8428E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10ED6241-707E-4A97-8805-565E7EE8428E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10ED6241-707E-4A97-8805-565E7EE8428E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C242A6BD-124C-4C54-995D-01379FF4F1E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C242A6BD-124C-4C54-995D-01379FF4F1E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C242A6BD-124C-4C54-995D-01379FF4F1E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C242A6BD-124C-4C54-995D-01379FF4F1E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
