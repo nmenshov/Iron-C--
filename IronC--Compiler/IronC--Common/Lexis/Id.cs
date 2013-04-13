@@ -25,5 +25,18 @@ namespace IronC__Common.Lexis
             id.SetValue(str);
             return id;
         }
+        public override bool IsEqual(string str)
+        {
+            if (str.Length == 0)
+                return false;
+
+            if (!(str[0] == '_' && str.Length>1 || char.IsLetterOrDigit(str[0])))
+                return false;
+
+            if (str.Any(x => !char.IsLetterOrDigit(x) && x != '_'))
+                return false;
+
+            return true;
+        }
     }
 }

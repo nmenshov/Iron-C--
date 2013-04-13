@@ -1,0 +1,135 @@
+28
+Z
+V
+F
+W
+Y
+NUMBER
+ID
+H
+Q
+P
+B
+D
+G
+C
+L
+O
+I
+T
+R
+S
+E
+X
+X1
+X2
+X3
+J
+N
+U
+33
+int
+char
+;
+return
+read
+write
+writeln
+break
+if
+else
+while
+[
+]
+{
+}
+(
+)
++
+-
+!
+*
+/
+==
+!=
+<
+<=
+>
+>=
+&&
+||
+=
+number
+letter
+69
+Z V F
+V W V
+V e
+W Y ID A
+A ;
+A [ NUMBER ] ;
+F H Q
+Q F
+Q e
+H Y ID ( P ) B
+P e
+P T
+T D G
+G e
+G , T
+D Y ID C
+C e
+C [ ]
+B { V L }
+Y int
+Y char
+L S M
+M e
+M L
+S ;
+S E ;
+S return E ;
+S read ID ;
+S write E ;
+S writeln E;
+S break ;
+S if ( E ) S else S
+S while ( E ) S
+S B
+E X1 X2
+X1 I
+X1 U E
+X1 ID O
+O = E
+O [ E ] = E
+I ID J
+I NUMBER
+I ( E )
+J e
+J ( X )
+J [ E ]
+X e
+X R
+R E X3
+X3 e
+X3 , R
+U -
+U !
+N +
+N -
+N *
+N /
+N ==
+N !=
+N <
+N <=
+N >
+N >=
+N &&
+N ||
+X2 e
+X2 N E X2
+NUMBER number
+ID letter
+Z
+

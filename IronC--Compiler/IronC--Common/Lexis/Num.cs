@@ -25,5 +25,10 @@ namespace IronC__Common.Lexis
             num.SetValue(str);
             return num;
         }
+
+        public override bool IsEqual(string str)
+        {
+            return str.All(char.IsNumber);
+        }
     }
 }

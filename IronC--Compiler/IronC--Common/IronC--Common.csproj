@@ -40,7 +40,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="Grammar.cs" />
+    <Compile Include="Grammars\Grammar.cs" />
+    <Compile Include="Grammars\Rule.cs" />
     <Compile Include="Lexis\EndSymbol.cs" />
     <Compile Include="Lexis\Epsilon.cs" />
     <Compile Include="Lexis\Id.cs" />
@@ -49,7 +50,8 @@
     <Compile Include="Lexis\Symbol.cs" />
     <Compile Include="Lexis\Terminal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SymbolType.cs" />
+    <Compile Include="Reader.cs" />
+    <Compile Include="Grammars\SymbolType.cs" />
     <Compile Include="Trees\Attribute.cs" />
     <Compile Include="Trees\IAttribute.cs" />
     <Compile Include="Trees\INode.cs" />

@@ -18,5 +18,11 @@ namespace IronC__Common.Trees
             _name = name;
             Value = value;
         }
+
+        public bool IsEqual(string name, object value)
+        {
+            var obj = (T)value;
+            return obj.Equals(Value);
+        }
     }
 }
