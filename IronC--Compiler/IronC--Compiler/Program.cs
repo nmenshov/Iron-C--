@@ -19,7 +19,7 @@ namespace IronC__Compiler
             Console.WriteLine("3. Semantics");
             Console.WriteLine("4. CodeGen");
             Console.Write("Input: ");
-            int choose = 1;// Convert.ToInt32(Console.ReadLine());
+            int choose =  Convert.ToInt32(Console.ReadLine());
 
             switch (choose)
             {

@@ -24,5 +24,44 @@ namespace IronC__Common.Lexis
         }
 
         public abstract Symbol GetCopy(string str);
+
+        // override object.Equals
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+                return false;
+
+            return Name.Equals((obj as Symbol).Name);
+        }
+
+        // override object.GetHashCode
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
+        }
+
+        public static bool operator ==(Symbol a, Symbol b)
+        {
+            object oa = a;
+            object ob = b;
+            if (oa == null && ob == null)
+                return true;
+            if (oa == null || ob == null)
+                return false;
+
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(Symbol a, Symbol b)
+        {
+            object oa = a;
+            object ob = b;
+            if (oa == null && ob == null)
+                return false;
+            if (oa == null || ob == null)
+                return true;
+
+            return !a.Equals(b);
+        }
     }
 }

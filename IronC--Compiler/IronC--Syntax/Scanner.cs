@@ -25,7 +25,7 @@ namespace IronC__Syntax
         public Symbol Scan()
         {
             if (_buffer.Count == _position)
-                return null;
+                return Terminals.EOF;
             return _buffer[_position++];
         }
 
@@ -34,7 +34,7 @@ namespace IronC__Syntax
             if (_peekPos < _position)
                 _peekPos = _position;
             if (_peekPos == _buffer.Count)
-                return null;
+                return Terminals.EOF;
             return _buffer[_peekPos++];
         }
 
@@ -42,6 +42,5 @@ namespace IronC__Syntax
         {
             _peekPos = _position;
         }
-
     }
 }

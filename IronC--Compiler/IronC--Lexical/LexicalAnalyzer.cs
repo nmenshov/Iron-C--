@@ -41,7 +41,7 @@ namespace IronC__Lexical
                 }
                 rab = Parse(rab, '.', ret);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return null;
             }

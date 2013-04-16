@@ -49,6 +49,7 @@
     <Compile Include="Lexis\Num.cs" />
     <Compile Include="Lexis\Symbol.cs" />
     <Compile Include="Lexis\Terminal.cs" />
+    <Compile Include="Lexis\Terminals.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reader.cs" />
     <Compile Include="Grammars\SymbolType.cs" />
