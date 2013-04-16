@@ -1,0 +1,108 @@
+COMPILER C__
+
+	const int // types
+	  undef = 0, integer = 1, boolean = 2;
+
+	const int // object kinds
+	  var = 0, proc = 1;
+
+	public SymbolTable   tab;
+	public CodeGenerator gen;
+
+bool IsDecl()
+{
+	Token id = scanner.Peek();
+	Token sc = scanner.Peek();
+	if ((la.kind == _int || la.kind == _char) && id.kind == _ident && sc.kind == _semicolon)
+		return true;
+	if ((la.kind == _int || la.kind == _char) && id.kind == _ident && sc.kind == _lpar)
+		return false;
+	return true;
+}
+
+bool IsAssign()
+{
+	Token next = scanner.Peek();
+	if (next.kind == _assign)
+		return true;
+	if (next.kind != _lbrace)
+		return false;
+	int braces = 1;
+	while (braces != 0)
+	{
+		next = scanner.Peek();
+		if (next.kind == _lbrace)
+			braces++;
+		else if (next.kind == _rbrace)
+			braces--;
+	}
+	next = scanner.Peek();
+	return next.kind == _assign;
+}
+  
+/*--------------------------------------------------------------------------*/
+CHARACTERS
+  letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".
+  digit = "0123456789".
+  cr  = '\r'.
+  lf  = '\n'.
+  tab = '\t'.
+
+TOKENS
+  ident  = letter {letter | digit}.
+  number = digit {digit}.
+  int = "int".
+  char = "char".
+  semicolon = ';'.
+  lpar = '('.
+  rpar = ')'.
+  assign = '='.
+  lbrace = '['.
+  rbrace = ']'.
+
+COMMENTS FROM "/*" TO "*/" NESTED
+COMMENTS FROM "//" TO lf
+
+IGNORE cr + lf + tab
+
+
+
+PRODUCTIONS
+C__ = {IF(IsDecl()) VarDecl} {FunDecl}.
+
+VarDecl = Type ident [ lbrace number rbrace ] semicolon.
+
+FunDecl = Type ident lpar [ParamDecl] rpar Block.
+
+Type = int|char.
+
+ParamDecl = Type ident[ lbrace rbrace ]{"," Type ident[ lbrace rbrace ]}.
+
+Block = '{' {VarDecl} {Smth} '}'.
+
+Smth = Expr semicolon
+	|"return" Expr semicolon
+	|"read" ident semicolon
+	|"write" Expr semicolon
+	|"writeln" semicolon
+	|"break" semicolon
+	|"if" lpar Expr rpar Smth "else" Smth
+	|"while" lpar Expr rpar Smth
+	|Block.
+
+Expr = SimExpr {BinaryOp Expr}.
+
+SimExpr = UnaryOp Expr
+	|lpar Expr rpar
+	|number
+	|(IF(IsAssign()) Assign|Access).
+
+Access = ident[(lpar Expr rpar|lbrace Expr rbrace)].
+
+Assign = ident[ lbrace Expr rbrace ] assign Expr.
+
+UnaryOp = '-'|'!'.
+
+BinaryOp = '+'|'-'|'*'|'/'|"=="|"!="|'<'|"<="|'>'|">="|"&&"|"||".
+
+END C__.

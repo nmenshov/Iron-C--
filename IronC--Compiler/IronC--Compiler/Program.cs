@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using IronC__Common;
 using IronC__Generator;
 using IronC__Lexical;
+using IronC__Syntax;
 
 namespace IronC__Compiler
 {
@@ -56,6 +57,26 @@ namespace IronC__Compiler
                     break;
 
                 case 2:
+                    var reader2 = new Reader("input.txt");
+                    var grammar2 = reader2.ReadGrammar();
+
+                    var la2 = new LexicalAnalyzer(grammar2);
+                    var tokens2 = la2.Convert(@"char c;
+                                                int main() {
+                                                  int x;
+                                                  int y;
+  
+                                                  x = 0;
+                                                  y = 5;
+
+                                                  while (x < y) {
+                                                    write x;
+                                                    writeln;
+                                                    x = x + 1;
+                                                  }
+                                                }");
+                    var syn = new SyntaxAnalyzer(tokens2);
+                    syn.Analyze();
                     break;
 
                 case 3:
