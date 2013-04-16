@@ -6,25 +6,30 @@ using System.Threading.Tasks;
 
 namespace IronC__Common.Trees
 {
-    public class Node<T> : INode<T>
+    public class Node : INode
     {
-        protected List<INode<T>> _childNodes;
+        protected List<INode> _childNodes;
         protected List<IAttribute> _attributes;
 
-        public List<INode<T>> Children { get { return _childNodes; } }
-        public List<IAttribute> Attribute { get { return _attributes; } }
+        public IList<INode> Children { get { return _childNodes; } }
+        public IList<IAttribute> Attribute { get { return _attributes; } }
 
         public Node()
         {
-            _childNodes = new List<INode<T>>();
+            _childNodes = new List<INode>();
             _attributes = new List<IAttribute>();
         }        
 
-        public INode<T> AddChild(INode<T> node)
+        public INode AddChild(INode node)
         {
             _childNodes.Add(node);
 
             return this;
+        }
+
+        public void AddChildren(IEnumerable<INode> nodes)
+        {
+            _childNodes.AddRange(nodes);
         }
 
         public void AddAttribute(IAttribute attribute)
@@ -32,7 +37,7 @@ namespace IronC__Common.Trees
             _attributes.Add(attribute);
         }
 
-        public void AddAttribute(List<IAttribute> attribute)
+        public void AddAttribute(IEnumerable<IAttribute> attribute)
         {
             _attributes.AddRange(attribute);
         }

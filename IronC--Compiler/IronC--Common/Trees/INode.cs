@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace IronC__Common.Trees
 {
-    public interface INode<T>
+    public interface INode
     {
-        List<INode<T>> Children { get; }
-        List<IAttribute> Attribute { get; }
+        IList<INode> Children { get; }
+        IList<IAttribute> Attribute { get; }
         
-        INode<T> AddChild(INode<T> value);
+        INode AddChild(INode value);
 
         void AddAttribute(IAttribute attribute);
-        void AddAttribute(List<IAttribute> attribute);
+        void AddAttribute(IEnumerable<IAttribute> attribute);
     }
 }

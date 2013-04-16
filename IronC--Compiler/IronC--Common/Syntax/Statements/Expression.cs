@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IronC__Common.Trees
+namespace IronC__Common.Syntax
 {
-    public interface ITree
+    public abstract class Expression: Statement
     {
-        INode Root { get; }
     }
 }

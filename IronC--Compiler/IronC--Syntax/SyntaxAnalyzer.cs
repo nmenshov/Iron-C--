@@ -9,6 +9,9 @@ using System.IO;
 using System.Collections;
 using System.Linq;
 using IronC__Common.Lexis;
+using IronC__Common.Syntax;
+using IronC__Common.Syntax.Expressions;
+using IronC__Common.Trees;
 
 namespace IronC__Syntax
 {
@@ -28,14 +31,23 @@ namespace IronC__Syntax
         {
             Debug.Assert(input != null);
             _scanner = new Scanner(input);
+            errors = new Errors();
         }
 
-        public void Analyze()
+        public ITree Analyze()
         {
             _la = null;
             Get();
-            C__();
+            var p = C__();
             Expect(Terminals.EOF);
+
+            if (errors.count == 0)
+            {
+                var tree = new Tree();
+                tree.AddRoot(p);
+                return tree;
+            }
+            return null;
         }
 
         #region Conflict resovlers
@@ -138,6 +150,8 @@ namespace IronC__Syntax
 
         #endregion
 
+        #region Errors
+
         void SynErr(int n)
         {
             if (errDist >= minErrDist) errors.SynErr(/*_la.line, _la.col*/0, 0, n);
@@ -149,6 +163,8 @@ namespace IronC__Syntax
             if (errDist >= minErrDist) errors.SemErr(/*t.line, t.col*/0, 0, msg);
             errDist = 0;
         }
+
+        #endregion
 
         void Get()
         {
@@ -162,253 +178,334 @@ namespace IronC__Syntax
             _la = _scanner.Scan();
         }
 
-        void Expect(Symbol n)
+        private Symbol Expect(Symbol n)
         {
-            if (_la == n) Get(); else { SynErr(/*n*/0); }
+            Symbol r = null;
+            if (_la == n)
+            {
+                r = _la;
+                Get();
+            }
+            else
+                SynErr(/*n*/0);
+            return r;
         }
 
-        void C__()
+        private Program C__()
         {
+            var vars = new List<VarDeclaration>();
+            var funs = new List<FuncDeclaration>();
+
             while (IsDecl())
             {
-                VarDecl();
+                vars.Add(VarDecl());
             }
             while (_la == Terminals.Int || _la == Terminals.Char)
             {
-                FunDecl();
+                funs.Add(FunDecl());
             }
+            return new Program(vars.ToArray(), funs.ToArray());
         }
 
-        void VarDecl()
+        private VarDeclaration VarDecl()
         {
-            Type();
-            Expect(Terminals.Id);
+            var type = Type();
+            var id = Expect(Terminals.Id) as Id;
+            Num size = null;
             if (_la == Terminals.LBrace)
             {
                 Get();
-                Expect(Terminals.Num);
+                size = Expect(Terminals.Num) as Num;
                 Expect(Terminals.RBrace);
             }
             Expect(Terminals.Semicolon);
+
+            if (size == null)
+                return new VarDeclaration(type, id);
+            return new ArrayDeclaration(type, id, size);
         }
 
-        void FunDecl()
+        private FuncDeclaration FunDecl()
         {
-            Type();
-            Expect(Terminals.Id);
+            var rType = Type();
+            var name = Expect(Terminals.Id) as Id;
+            var parameters = new ParamDeclaration[0];
             Expect(Terminals.LPar);
             if (_la == Terminals.Int || _la == Terminals.Char)
             {
-                ParamDecl();
+                parameters = ParamDecl();
             }
             Expect(Terminals.RPar);
-            Block();
+            var body = Block();
+            return new FuncDeclaration(rType, name, parameters, body);
         }
 
-        void Type()
+        private Terminal Type()
         {
             if (_la == Terminals.Int)
             {
                 Get();
+                return Terminals.Int as Terminal;
             }
             else if (_la == Terminals.Char)
             {
                 Get();
+                return Terminals.Char as Terminal;
             }
             else SynErr(36);
+            return null;
         }
 
-        void ParamDecl()
+        private ParamDeclaration[] ParamDecl()
         {
-            Type();
-            Expect(Terminals.Id);
+            var parameters = new List<ParamDeclaration>();
+
+            var type = Type();
+            var id = Expect(Terminals.Id) as Id;
+            bool isArray = false;
             if (_la == Terminals.LBrace)
             {
                 Get();
                 Expect(Terminals.RBrace);
+                isArray = true;
             }
+            parameters.Add(new ParamDeclaration(type, id, isArray));
+
             while (_la == Terminals.Comma)
             {
                 Get();
-                Type();
-                Expect(Terminals.Id);
+                type = Type();
+                id = Expect(Terminals.Id) as Id;
                 if (_la == Terminals.LBrace)
                 {
                     Get();
                     Expect(Terminals.RBrace);
+                    isArray = true;
                 }
+                else
+                    isArray = false;
+                parameters.Add(new ParamDeclaration(type, id, isArray));
             }
+
+            return parameters.ToArray();
         }
 
-        void Block()
+        private Block Block()
         {
+            var vars = new List<VarDeclaration>();
+            var stats = new List<Statement>();
+
             Expect(Terminals.Start);
             while (_la == Terminals.Int || _la == Terminals.Char)
             {
-                VarDecl();
+                vars.Add(VarDecl());
             }
             while (StartOf(1))
             {
-                Smth();
+                stats.Add(Smth());
             }
             Expect(Terminals.End);
+
+            return new Block(vars.ToArray(), stats.ToArray());
         }
 
-        private void Smth()
+        private Statement Smth()
         {
+            Statement st = null;
             if (_la == Terminals.Id || _la == Terminals.Num || _la == Terminals.LPar || _la == Terminals.Minus ||
                 _la == Terminals.Inv)
             {
-                Expr();
+                st = Expr();
                 Expect(Terminals.Semicolon);
             }
             else if (_la == Terminals.Return)
             {
                 Get();
-                Expr();
+                var r = Expr();
                 Expect(Terminals.Semicolon);
+                st = new ReturnStatement(r);
             }
             else if (_la == Terminals.Read)
             {
                 Get();
-                Expect(Terminals.Id);
+                var v = Expect(Terminals.Id) as Id;
                 Expect(Terminals.Semicolon);
+                st = new ReadStatement(v);
             }
             else if (_la == Terminals.Write)
             {
                 Get();
-                Expr();
+                var r = Expr();
                 Expect(Terminals.Semicolon);
+                st = new WriteStatement(r);
             }
             else if (_la == Terminals.Writeln)
             {
                 Get();
                 Expect(Terminals.Semicolon);
+                st = new WritelnStatement();
             }
             else if (_la == Terminals.Break)
             {
                 Get();
                 Expect(Terminals.Semicolon);
+                st = new BreakStatement();
             }
             else if (_la == Terminals.If)
             {
                 Get();
                 Expect(Terminals.LPar);
-                Expr();
+                var c = Expr();
                 Expect(Terminals.RPar);
-                Smth();
+                var t = Smth();
                 Expect(Terminals.Else);
-                Smth();
+                var f = Smth();
+                st = new IfStatement(c, t, f);
             }
             else if (_la == Terminals.While)
             {
                 Get();
                 Expect(Terminals.LPar);
-                Expr();
+                var c = Expr();
                 Expect(Terminals.RPar);
-                Smth();
+                var s = Smth();
+                st = new WhileStatement(c, s);
             }
             else if (_la == Terminals.Start)
             {
-                Block();
+                st = Block();
             }
             else
                 SynErr(37);
+            return st;
         }
 
-        void Expr()
+        private Expression Expr()
         {
-            SimExpr();
+            var ex = SimExpr();
             while (StartOf(2))
             {
-                BinaryOp();
-                Expr();
+                var op = BinaryOp();
+                var ex2 = Expr();
+
+                ex = new BinaryExpression(ex, op ,ex2);
             }
+            return ex;
         }
 
-        void SimExpr()
+        private Expression SimExpr()
         {
+            Expression ex = null;
             if (_la == Terminals.Minus || _la == Terminals.Inv)
             {
-                UnaryOp();
-                Expr();
+                var op = UnaryOp();
+                var e = Expr();
+                ex = new UnaryExpression(op, e);
             }
             else if (_la == Terminals.LPar)
             {
                 Get();
-                Expr();
+                ex = Expr();
                 Expect(Terminals.RPar);
             }
             else if (_la == Terminals.Num)
             {
+                var num = _la as Num;
                 Get();
+                ex = new NumberExpression(num);
             }
             else if (_la == Terminals.Id)
             {
                 if (IsAssign())
                 {
-                    Assign();
+                    ex = Assign();
                 }
                 else
                 {
-                    Access();
+                    ex = Access();
                 }
             }
             else SynErr(38);
+            return ex;
         }
 
-        private void BinaryOp()
+        private Terminal BinaryOp()
         {
+            Terminal r = null;
             if (_la == Terminals.Plus || _la == Terminals.Minus || _la == Terminals.Div || _la == Terminals.Mul || _la == Terminals.Equal ||
                 _la == Terminals.NotEqual || _la == Terminals.Less || _la == Terminals.LessOrEqual || _la == Terminals.Great || 
                 _la == Terminals.GreatOrEqual || _la == Terminals.And || _la == Terminals.Or)
             {
+                r = _la as Terminal;
                 Get();
             }
             else
                 SynErr(39);
+            return r;
         }
 
-        void UnaryOp()
+        private Terminal UnaryOp()
         {
+            Terminal op = null;
             if (_la == Terminals.Minus || _la == Terminals.Inv)
             {
+                op = _la as Terminal;
                 Get();
             }
             else SynErr(40);
+            return op;
         }
 
-        void Assign()
+        private Expression Assign()
         {
-            Expect(Terminals.Id);
+            var id = Expect(Terminals.Id) as Id;
+            Expression index = null;
             if (_la == Terminals.LBrace)
             {
                 Get();
-                Expr();
+                index = Expr();
                 Expect(Terminals.RBrace);
             }
             Expect(Terminals.Assign);
-            Expr();
+            var value = Expr();
+            
+            if (index == null)
+                return new SetValueExpression(id, value);
+            return new SetArrayValueExpression(id, value, index);
         }
 
-        void Access()
+        private Expression Access()
         {
-            Expect(Terminals.Id);
+            var id = Expect(Terminals.Id) as Id;
             if (_la == Terminals.LBrace || _la == Terminals.LPar)
             {
                 if (_la == Terminals.LPar)
                 {
+                    var parameters = new List<Expression>();
+
                     Get();
-                    Expr();
+                    var e = Expr();
+                    parameters.Add(e);
+                    while (_la == Terminals.Comma)
+                    {
+                        Get();
+                        e = Expr();
+                        parameters.Add(e);
+                    }
                     Expect(Terminals.RPar);
+
+                    return new FuncCallExpression(id, parameters.ToArray());
                 }
                 else
                 {
                     Get();
-                    Expr();
+                    var e = Expr();
                     Expect(Terminals.RBrace);
+
+                    return new GetArrayValueExpression(id, e);
                 }
             }
+            return new GetValueExpression(id);
         }
     }
 

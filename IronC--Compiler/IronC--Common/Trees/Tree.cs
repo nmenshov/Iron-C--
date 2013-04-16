@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace IronC__Common.Trees
 {
-    public class Tree<T> : ITree<T>
+    public class Tree : ITree
     {
-        protected INode<T> _root;
+        protected INode _root;
 
-        public INode<T> Root { get { return _root; } }
+        public INode Root { get { return _root; } }
 
-        public void AddRoot(INode<T> root)
+        public void AddRoot(INode root)
         {
             _root = root;
         }

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IronC__Common.Trees;
 
-namespace IronC__Common.Trees
+namespace IronC__Common.Syntax
 {
-    public interface ITree
+    public class BreakStatement: Statement
     {
-        INode Root { get; }
     }
 }
