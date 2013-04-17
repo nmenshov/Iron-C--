@@ -10,8 +10,8 @@ namespace IronC__UnitTests
         [TestMethod]
         public void Test1()
         {
-            var g = new CodeGenerator();
-            g.Generate();
+            var g = new CodeGenerator(null);
+            g.Generate("");
         }
     }
 }

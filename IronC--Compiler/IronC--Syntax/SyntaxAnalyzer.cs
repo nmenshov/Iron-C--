@@ -103,15 +103,15 @@ namespace IronC__Syntax
             d.Add(Terminals.LPar, new[]{false, true, false});
             d.Add(Terminals.RPar, new[]{false, false, false});
 
-            d.Add(Terminals.Assign, new[]{false, true, false});
+            d.Add(Terminals.Assign, new[]{false, false, false});
             d.Add(Terminals.LBrace, new[]{false, false, false});
-            d.Add(Terminals.RBrace, new[]{false, true, false});
-            d.Add(Terminals.Comma, new[]{false, true, false});
+            d.Add(Terminals.RBrace, new[]{false, false, false});
+            d.Add(Terminals.Comma, new[]{false, false, false});
 
-            d.Add(Terminals.Start, new[]{false, false, false});
+            d.Add(Terminals.Start, new[]{false, true, false});
             d.Add(Terminals.End, new[]{false, false, false});
-            d.Add(Terminals.Return, new[]{false, false, false});
-            d.Add(Terminals.Read, new[]{false, false, false});
+            d.Add(Terminals.Return, new[]{false, true, false});
+            d.Add(Terminals.Read, new[]{false, true, false});
 
             d.Add(Terminals.Write, new[]{false, true, false});
             d.Add(Terminals.Writeln, new[]{false, true, false});

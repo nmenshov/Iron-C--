@@ -83,8 +83,37 @@ namespace IronC__Compiler
                     break;
 
                 case 4:
-                    var gen = new CodeGenerator();
-                    gen.Generate();
+                    var reader3 = new Reader("input.txt");
+                    var grammar3 = reader3.ReadGrammar();
+
+                    var la3 = new LexicalAnalyzer(grammar3);
+                    /*var tokens3 = la3.Convert(@"char c;
+                                                int main() {
+                                                  int x;
+                                                  int y;
+  
+                                                  x = 0;
+                                                  y = 5;
+
+                                                  while (x < y) {
+                                                    write x;
+                                                    writeln;
+                                                    x = x + 1;
+                                                  }
+                                                }");*/
+                    var tokens3 = la3.Convert(@"int main()
+{
+char a;
+read a;
+a = a + 3;
+write a;
+return 0;
+}");
+                    var syn3 = new SyntaxAnalyzer(tokens3);
+                    var tree3 = syn3.Analyze();
+
+                    var gen = new CodeGenerator(tree3);
+                    gen.Generate("app.exe");
                     break;
 
                 default:

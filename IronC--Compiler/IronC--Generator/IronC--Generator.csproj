@@ -40,7 +40,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodeGenerator.cs" />
+    <Compile Include="FuncParam.cs" />
+    <Compile Include="Function.cs" />
+    <Compile Include="GlobalArrayVariable.cs" />
+    <Compile Include="GlobalVariable.cs" />
+    <Compile Include="LocalVariable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IronC--Common\IronC--Common.csproj">
+      <Project>{c242a6bd-124c-4c54-995d-01379ff4f1e8}</Project>
+      <Name>IronC--Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

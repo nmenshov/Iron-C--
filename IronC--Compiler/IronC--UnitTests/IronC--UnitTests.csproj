@@ -54,6 +54,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IronC--Common\IronC--Common.csproj">
+      <Project>{c242a6bd-124c-4c54-995d-01379ff4f1e8}</Project>
+      <Name>IronC--Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IronC--Generator\IronC--Generator.csproj">
       <Project>{ea97caa9-de96-4786-b2d5-c94300be7e23}</Project>
       <Name>IronC--Generator</Name>
