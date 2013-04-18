@@ -9,6 +9,7 @@ namespace IronC__Common.Lexis
 {
     public class EndSymbol:Symbol
     {
+
         public EndSymbol() : base(Constants.EndSymbolName, SymbolType.EndSymbol)
         {
         }

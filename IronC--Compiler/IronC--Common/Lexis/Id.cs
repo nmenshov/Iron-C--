@@ -8,7 +8,7 @@ namespace IronC__Common.Lexis
 {
     public class Id:Terminal
     {
-        public string Value { get; private set; }
+        public string Value { get;  set; }
 
         public Id() : base("Id")
         {            

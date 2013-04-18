@@ -9,6 +9,10 @@ namespace IronC__Common.Lexis
 {
     public class Terminal:Symbol
     {
+        public Terminal()
+        {
+        }
+
         public Terminal(string name) : base(name, SymbolType.Terminal)
         {
         }

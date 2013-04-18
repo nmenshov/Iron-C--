@@ -9,6 +9,10 @@ namespace IronC__Common.Lexis
 {
     public class NotTerminal:Symbol
     {
+        public NotTerminal()
+        {
+        }
+
         public NotTerminal(string name) : base(name, SymbolType.NotTerminal)
         {
         }

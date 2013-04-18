@@ -3,14 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using IronC__Common.Grammars;
 
 namespace IronC__Common.Lexis
-{
+{    
     public abstract class Symbol
     {
-        public readonly string Name;
+        public string Name { get; set; }
         public readonly SymbolType Type;
+
+        public Symbol()
+        {
+        }
 
         protected Symbol(string name, SymbolType type)
         {

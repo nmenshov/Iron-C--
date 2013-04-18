@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using IronC__Common;
 using IronC__Common.Grammars;
 using IronC__Common.Lexis;
@@ -13,10 +15,12 @@ namespace IronC__Lexical
     public class LexicalAnalyzer
     {
         private readonly Grammar _grammar;
+        private readonly string _output;
 
-        public LexicalAnalyzer(Grammar grammar)
+        public LexicalAnalyzer(Grammar grammar, string output)
         {
             _grammar = grammar;
+            _output = output;
         }
 
         public List<Symbol> Convert(string input)
@@ -45,9 +49,13 @@ namespace IronC__Lexical
             {
                 return null;
             }
-            
+
+            Serialize(ret);
+
             return ret;
         }
+
+        #region Parse
 
         private string Parse(string rab, char symbol, List<Symbol> ret)
         {
@@ -127,6 +135,27 @@ namespace IronC__Lexical
 
             var ret = element.GetCopy(str);
             return ret;
+        }
+
+        #endregion
+
+        private void Serialize(List<Symbol> tokens)
+        {
+            var list = new[]
+                {
+                    typeof(Terminal),
+                    typeof(NotTerminal),
+                    typeof(Num),
+                    typeof(Id),
+                    typeof(Epsilon),
+                    typeof(EndSymbol),
+                    typeof(Symbol),
+                };
+            var serializer = new XmlSerializer(tokens.GetType(), list);
+            var writer = new StreamWriter(_output);
+            serializer.Serialize(writer,tokens);
+            writer.Flush();
+            writer.Close();
         }
     }
 }

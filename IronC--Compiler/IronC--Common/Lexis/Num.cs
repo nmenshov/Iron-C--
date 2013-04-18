@@ -8,7 +8,7 @@ namespace IronC__Common.Lexis
 {
     public class Num:Terminal
     {
-        public int Value { get; private set; }
+        public int Value { get;  set; }
 
         public Num() : base("Num")
         {            
