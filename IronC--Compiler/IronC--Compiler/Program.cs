@@ -20,7 +20,7 @@ namespace IronC__Compiler
             Console.WriteLine("4. CodeGen");
             Console.Write("Input: ");
             //int choose =  Convert.ToInt32(Console.ReadLine());
-            int choose = 1;
+            int choose = 4;
 
             switch (choose)
             {
@@ -86,7 +86,8 @@ namespace IronC__Compiler
 
                                                 int main()
                                                 {
-                                                char a = func();
+                                                char a;
+                                                a = func();
                                                 write a;
                                                 read a;
                                                 a = a + 3;

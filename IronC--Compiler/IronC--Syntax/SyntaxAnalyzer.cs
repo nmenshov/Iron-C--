@@ -93,52 +93,52 @@ namespace IronC__Syntax
         {
             var d = new Dictionary<Symbol, bool[]>();
 
-            d.Add(Terminals.EOF, new[]{true, false, false});
-            d.Add(Terminals.Id, new[]{false, true, false});
-            d.Add(Terminals.Num, new[]{false, true, false});
-            d.Add(Terminals.Int, new[]{false, false, false});
+            d.Add(Terminals.EOF, new[]{true, false, false, false});
+            d.Add(Terminals.Id, new[]{false, true, false, true});
+            d.Add(Terminals.Num, new[]{false, true, false, true});
+            d.Add(Terminals.Int, new[]{false, false, false, false});
 
-            d.Add(Terminals.Char, new[]{false, false, false});
-            d.Add(Terminals.Semicolon, new[]{false, false, false});
-            d.Add(Terminals.LPar, new[]{false, true, false});
-            d.Add(Terminals.RPar, new[]{false, false, false});
+            d.Add(Terminals.Char, new[]{false, false, false, false});
+            d.Add(Terminals.Semicolon, new[]{false, false, false, false});
+            d.Add(Terminals.LPar, new[]{false, true, false, true});
+            d.Add(Terminals.RPar, new[]{false, false, false, false});
 
-            d.Add(Terminals.Assign, new[]{false, false, false});
-            d.Add(Terminals.LBrace, new[]{false, false, false});
-            d.Add(Terminals.RBrace, new[]{false, false, false});
-            d.Add(Terminals.Comma, new[]{false, false, false});
+            d.Add(Terminals.Assign, new[]{false, false, false, false});
+            d.Add(Terminals.LBrace, new[]{false, false, false, false});
+            d.Add(Terminals.RBrace, new[]{false, false, false, false});
+            d.Add(Terminals.Comma, new[]{false, false, false, false});
 
-            d.Add(Terminals.Start, new[]{false, true, false});
-            d.Add(Terminals.End, new[]{false, false, false});
-            d.Add(Terminals.Return, new[]{false, true, false});
-            d.Add(Terminals.Read, new[]{false, true, false});
+            d.Add(Terminals.Start, new[]{false, true, false, false});
+            d.Add(Terminals.End, new[]{false, false, false, false});
+            d.Add(Terminals.Return, new[]{false, true, false, false});
+            d.Add(Terminals.Read, new[]{false, true, false, false});
 
-            d.Add(Terminals.Write, new[]{false, true, false});
-            d.Add(Terminals.Writeln, new[]{false, true, false});
-            d.Add(Terminals.Break, new[]{false, true, false});
-            d.Add(Terminals.If, new[]{false, true, false});
+            d.Add(Terminals.Write, new[]{false, true, false, false});
+            d.Add(Terminals.Writeln, new[]{false, true, false, false});
+            d.Add(Terminals.Break, new[]{false, true, false, false});
+            d.Add(Terminals.If, new[]{false, true, false, false});
 
-            d.Add(Terminals.Else, new[]{false, false, false});
-            d.Add(Terminals.While, new[]{false, true, false});
-            d.Add(Terminals.Minus, new[]{false, true, true});
-            d.Add(Terminals.Inv, new[]{false, true, false});
+            d.Add(Terminals.Else, new[]{false, false, false, false});
+            d.Add(Terminals.While, new[]{false, true, false, false});
+            d.Add(Terminals.Minus, new[]{false, true, true, true});
+            d.Add(Terminals.Inv, new[]{false, true, false, true});
             
-            d.Add(Terminals.Plus, new[]{false, false, true});
-            d.Add(Terminals.Mul, new[]{false, false, true});
-            d.Add(Terminals.Div, new[]{false, false, true});
-            d.Add(Terminals.Equal, new[]{false, false, true});
+            d.Add(Terminals.Plus, new[]{false, false, true, false});
+            d.Add(Terminals.Mul, new[]{false, false, true, false});
+            d.Add(Terminals.Div, new[]{false, false, true, false});
+            d.Add(Terminals.Equal, new[]{false, false, true, false});
             
-            d.Add(Terminals.NotEqual, new[]{false, false, true});
-            d.Add(Terminals.Less, new[]{false, false, true});
-            d.Add(Terminals.LessOrEqual, new[]{false, false, true});
-            d.Add(Terminals.Great, new[]{false, false, true});
+            d.Add(Terminals.NotEqual, new[]{false, false, true, false});
+            d.Add(Terminals.Less, new[]{false, false, true, false});
+            d.Add(Terminals.LessOrEqual, new[]{false, false, true, false});
+            d.Add(Terminals.Great, new[]{false, false, true, false});
            
-            d.Add(Terminals.GreatOrEqual, new[]{false, false, true});
-            d.Add(Terminals.And, new[]{false, false, true});
-            d.Add(Terminals.Or, new[]{false, false, true});
+            d.Add(Terminals.GreatOrEqual, new[]{false, false, true, false});
+            d.Add(Terminals.And, new[]{false, false, true, false});
+            d.Add(Terminals.Or, new[]{false, false, true, false});
             //d.Add(_35, new[]{false, false, false});
             
-            //d.Add(_36, new[]{false, false, false});
+            //d.Add(_36, new[]{false, false, false});4
 
             return d;
         }
@@ -484,13 +484,16 @@ namespace IronC__Syntax
                     var parameters = new List<Expression>();
 
                     Get();
-                    var e = Expr();
-                    parameters.Add(e);
-                    while (_la == Terminals.Comma)
+                    if (StartOf(3))
                     {
-                        Get();
-                        e = Expr();
+                        var e = Expr();
                         parameters.Add(e);
+                        while (_la == Terminals.Comma)
+                        {
+                            Get();
+                            e = Expr();
+                            parameters.Add(e);
+                        }
                     }
                     Expect(Terminals.RPar);
 
