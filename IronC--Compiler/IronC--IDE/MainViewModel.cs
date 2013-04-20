@@ -97,7 +97,7 @@ namespace IronC__IDE
             var gen = new CodeGenerator(tree);
             gen.Generate(Path.GetFileNameWithoutExtension(_lastUsedFileName) + ".exe");
             MoveFile();
-            using (var proc = Process.Start(GetExePath()))
+            using (var proc = Process.Start(Path.GetFileNameWithoutExtension(_lastUsedFileName) + ".exe"))
             {
                 proc.WaitForExit();
             }
@@ -105,9 +105,11 @@ namespace IronC__IDE
 
         private void MoveFile()
         {
-            if (File.Exists(GetExePath()))
-                File.Delete(GetExePath());
-            File.Move(Path.GetFileNameWithoutExtension(_lastUsedFileName) + ".exe", GetExePath());
+            //if (Path.GetFileNameWithoutExtension(_lastUsedFileName) + ".exe" == GetExePath())
+            //    return;
+            //if (File.Exists(GetExePath()))
+            //    File.Delete(GetExePath());
+            //File.Move(Path.GetFileNameWithoutExtension(_lastUsedFileName) + ".exe", GetExePath());
         }
 
         private string GetExePath()

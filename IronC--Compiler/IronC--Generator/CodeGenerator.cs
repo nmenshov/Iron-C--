@@ -482,6 +482,15 @@ namespace IronC__Generator
                 var name = varDeclaration.Id.Value;
                 var type = GetVarType(varDeclaration);
                 var info = il.DeclareLocal(type);
+
+                if (varDeclaration is ArrayDeclaration)
+                {
+                    var array = varDeclaration as ArrayDeclaration;
+                    il.Emit(OpCodes.Ldc_I4, array.Size.Value);
+                    il.Emit(OpCodes.Newarr, type);
+                    il.Emit(OpCodes.Stloc, info);
+                }
+
                 list.Add(new LocalVariable(name, info, type));
             }
             foreach (var s in block.Statements)
@@ -531,7 +540,7 @@ namespace IronC__Generator
             for (int i = 0; i < paramDeclarations.Length; i++)
             {
                 var type = GetType(paramDeclarations[i].Type, paramDeclarations[i].IsArray);
-                pars[i] = new FuncParam(paramDeclarations[i].Name, type, i);
+                pars[i] = new FuncParam(paramDeclarations[i].Id.Value, type, i);
             }
 
             return pars;
