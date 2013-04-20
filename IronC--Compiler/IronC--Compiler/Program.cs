@@ -79,28 +79,26 @@ namespace IronC__Compiler
                     var grammar3 = reader3.ReadGrammar();
 
                     var la3 = new LexicalAnalyzer(grammar3, "LA.xml");
-                    var tokens3 = la3.Convert(@"int func(int b)
-                                                {
-                                                    {
-                                                        int c;
-                                                        c=b;
-                                                    }
-                                                    b = c+2;
-                                                    return 0;
-                                                }
-                                                 
+                    var tokens3 = la3.Convert(@"
+                                                int func()
+                                                {return 3;}
                                                 int main()
                                                 {
-                                                char a;
-                                                {int b;}
-                                                {int b;}
-                                                a = 3 + 3;
-                                                a = b+c;
-                                                write a;                                               
-                                                read a;
-                                                a = a + 3;
-                                                write a;
-                                                return 0;
+                                                    char a;
+                                                    int b;
+                                                    a = main();
+                                                    b = main();
+                                                    a = 3+a+b;
+                                                    a = 3+a;
+                                                    a = -b;
+                                                    a = -a;
+                                                    a = a + 3 * a;
+                                                    if(a>b) a=2; else a=4;
+                                                    write a;                                               
+                                                    read a;
+                                                    a = a + 3;
+                                                    write a;
+                                                    return 0;
                                                 }");
                     var syn3 = new SyntaxAnalyzer(tokens3);
                     var tree3 = syn3.Analyze();

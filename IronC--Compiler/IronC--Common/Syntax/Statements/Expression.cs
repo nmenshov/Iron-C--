@@ -8,5 +8,6 @@ namespace IronC__Common.Syntax
 {
     public abstract class Expression: Statement
     {
+        public bool IsTypeChecked { get; set; }
     }
 }

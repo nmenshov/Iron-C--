@@ -8,7 +8,7 @@ using IronC__Common.Trees;
 
 namespace IronC__Common.Syntax
 {
-    class TypeAttr: IAttribute
+    public class TypeAttr: IAttribute
     {
         public string Name { get; private set; }
         public bool IsEqual(string name, object value)
