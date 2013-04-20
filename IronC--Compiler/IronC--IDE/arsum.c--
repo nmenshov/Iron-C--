@@ -1,0 +1,39 @@
+int Input(int array[])
+{
+	int n;
+	int i;
+	int c;
+	read n;
+	i = 0;
+	while (i < n)
+	{
+		read c;
+		array[i] = c;
+		i = i + 1;
+	}
+	return n;
+}
+
+int Sum(int array[], int n)
+{
+	int i;
+	int sum;
+	i = 0;
+	sum = 0;
+	while (i < n)
+	{
+		sum = sum + array[i];
+		i = i + 1;
+	}
+	return sum;
+}
+
+int main()
+{
+	int array[50];
+	int n;
+	n = Input(array);
+	write Sum(array, n);
+	read n;
+	return 0;
+}
