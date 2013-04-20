@@ -9,8 +9,8 @@ namespace IronC__Common.Syntax.Expressions
 {
     public class SetValueExpression: Expression
     {
-        public Id Variable { get; private set; }
-        public Expression Value { get; private set; }
+        public Id Variable { get; set; }
+        public Expression Value { get; set; }
 
         public SetValueExpression(Id variable, Expression value)
         {
@@ -19,5 +19,8 @@ namespace IronC__Common.Syntax.Expressions
             AddAttribute(new IdAttr(variable));
             AddChild(value);
         }
+
+        public SetValueExpression()
+        {}
     }
 }

@@ -11,7 +11,7 @@ namespace IronC__Common.Syntax
     public class VarDeclaration: Node
     {
         public Terminal Type { get; set; }
-        public Id Id { get; private set; }
+        public Id Id { get; set; }
 
         public VarDeclaration(Terminal type, Id id)
         {
@@ -20,5 +20,8 @@ namespace IronC__Common.Syntax
             AddAttribute(new TypeAttr(type));
             AddAttribute(new IdAttr(id));
         }
+
+        public VarDeclaration()
+        {}
     }
 }

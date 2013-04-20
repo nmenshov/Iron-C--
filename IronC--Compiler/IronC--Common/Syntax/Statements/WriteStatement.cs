@@ -8,7 +8,7 @@ namespace IronC__Common.Syntax
 {
     public class WriteStatement: Statement
     {
-        public Expression Expression { get; private set; }
+        public Expression Expression { get; set; }
 
         public WriteStatement(Expression expression)
         {
@@ -16,5 +16,8 @@ namespace IronC__Common.Syntax
 
             AddChild(expression);
         }
+
+        public WriteStatement()
+        {}
     }
 }

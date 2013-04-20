@@ -21,7 +21,7 @@ namespace IronC__Compiler
             Console.WriteLine("4. CodeGen");
             Console.Write("Input: ");
             //int choose =  Convert.ToInt32(Console.ReadLine());
-            int choose = 4;
+            int choose = 2;
 
             switch (choose)
             {
@@ -68,7 +68,8 @@ namespace IronC__Compiler
                                                   }
                                                 }");
                     var syn = new SyntaxAnalyzer(tokens2);
-                    syn.Analyze();
+                    var tree = syn.Analyze();
+                    //(tree.Root as IronC__Common.Syntax.Program).Serialize(@"G:\tree.txt");
                     break;
 
                 case 3:

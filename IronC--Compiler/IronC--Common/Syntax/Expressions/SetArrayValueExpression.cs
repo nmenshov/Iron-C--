@@ -9,9 +9,9 @@ namespace IronC__Common.Syntax.Expressions
 {
     public class SetArrayValueExpression: Expression
     {
-        public Id Variable { get; private set; }
-        public Expression Value { get; private set; }
-        public Expression Index { get; private set; }
+        public Id Variable { get; set; }
+        public Expression Value { get; set; }
+        public Expression Index { get; set; }
 
         public SetArrayValueExpression(Id variable, Expression value, Expression index)
         {
@@ -22,5 +22,8 @@ namespace IronC__Common.Syntax.Expressions
             AddChild(value);
             AddChild(index);
         }
+
+        public SetArrayValueExpression()
+        {}
     }
 }

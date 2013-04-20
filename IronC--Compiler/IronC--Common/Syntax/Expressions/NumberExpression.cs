@@ -9,12 +9,15 @@ namespace IronC__Common.Syntax.Expressions
 {
     public class NumberExpression: Expression
     {
-        public Num Num { get; private set; }
+        public Num Num { get; set; }
 
         public NumberExpression(Num num)
         {
             Num = num;
             AddAttribute(new NumAttr(num));
         }
+
+        public NumberExpression()
+        {}
     }
 }

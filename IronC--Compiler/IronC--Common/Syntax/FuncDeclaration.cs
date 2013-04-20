@@ -10,10 +10,10 @@ namespace IronC__Common.Syntax
 {
     public class FuncDeclaration: Node
     {
-        public Terminal ReturnType { get; private set; }
-        public Id Name { get; private set; }
-        public ParamDeclaration[] Params { get; private set; }
-        public Block Body { get; private set; }
+        public Terminal ReturnType { get; set; }
+        public Id Name { get; set; }
+        public ParamDeclaration[] Params { get; set; }
+        public Block Body { get; set; }
 
         public FuncDeclaration(Terminal returnType, Id name, ParamDeclaration[] parameters, Block body)
         {
@@ -27,5 +27,8 @@ namespace IronC__Common.Syntax
             AddAttribute(parameters);
             AddChild(body);
         }
+
+        public FuncDeclaration()
+        {}
     }
 }

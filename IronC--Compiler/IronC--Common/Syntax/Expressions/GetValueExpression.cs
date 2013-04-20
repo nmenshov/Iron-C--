@@ -9,12 +9,15 @@ namespace IronC__Common.Syntax.Expressions
 {
     public class GetValueExpression: Expression
     {
-        public Id Variable { get; private set; }
+        public Id Variable { get; set; }
 
         public GetValueExpression(Id variable)
         {
             Variable = variable;
             AddAttribute(new IdAttr(variable));
         }
+
+        public GetValueExpression()
+        {}
     }
 }

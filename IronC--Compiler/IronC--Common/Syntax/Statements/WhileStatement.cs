@@ -9,8 +9,8 @@ namespace IronC__Common.Syntax
 {
     public class WhileStatement: Statement
     {
-        public Expression Condition { get; private set; }
-        public Statement Statement { get; private set; }
+        public Expression Condition { get; set; }
+        public Statement Statement { get; set; }
 
         public WhileStatement(Expression condition, Statement statement)
         {
@@ -20,5 +20,8 @@ namespace IronC__Common.Syntax
             AddChild(condition);
             AddChild(statement);
         }
+
+        public WhileStatement()
+        {}
     }
 }

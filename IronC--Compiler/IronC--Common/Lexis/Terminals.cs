@@ -1,4 +1,6 @@
-﻿namespace IronC__Common.Lexis
+﻿using System.Collections.Generic;
+
+namespace IronC__Common.Lexis
 {
     public class Terminals
     {
@@ -37,5 +39,49 @@
         public static readonly Symbol And = new Terminal("&&");         //33
         public static readonly Symbol Or = new Terminal("||");          //34
         public static readonly Symbol EOF = new EndSymbol();            //0
+
+        public static readonly Dictionary<Symbol, int> OrderNums;
+
+        static Terminals()
+        {
+            OrderNums = new Dictionary<Symbol, int>
+                {
+                    {EOF, 0},
+                    {Id, 1},
+                    {Num, 2},
+                    {Int, 3},
+                    {Char, 4},
+                    {Semicolon, 5},
+                    {LPar, 6},
+                    {RPar, 7},
+                    {Assign, 8},
+                    {LBrace, 9},
+                    {RBrace, 10},
+                    {Comma, 11},
+                    {Start, 12},
+                    {End, 13},
+                    {Return, 14},
+                    {Read, 15},
+                    {Write, 16},
+                    {Writeln, 17},
+                    {Break, 18},
+                    {If, 19},
+                    {Else, 20},
+                    {While, 21},
+                    {Minus, 22},
+                    {Inv, 23},
+                    {Plus, 24},
+                    {Mul, 25},
+                    {Div, 26},
+                    {Equal, 27},
+                    {NotEqual, 28},
+                    {Less, 29},
+                    {LessOrEqual, 30},
+                    {Great, 31},
+                    {GreatOrEqual, 32},
+                    {And, 33},
+                    {Or, 34}
+                };
+        }
     }
 }

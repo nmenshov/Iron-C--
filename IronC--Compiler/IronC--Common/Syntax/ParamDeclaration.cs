@@ -10,15 +10,15 @@ namespace IronC__Common.Syntax
 {
     public class ParamDeclaration: IAttribute
     {
-        public string Name { get; private set; }
+        public string Name { get; set; }
         public bool IsEqual(string name, object value)
         {
             throw new NotImplementedException();
         }
 
-        public Terminal Type { get; private set; }
-        public Id Id { get; private set; }
-        public bool IsArray { get; private set; }
+        public Terminal Type { get; set; }
+        public Id Id { get; set; }
+        public bool IsArray { get; set; }
         public int NewId { get; set; }
 
         public string NewValue { get { return Id.Value + NewId; } }
@@ -29,5 +29,8 @@ namespace IronC__Common.Syntax
             Id = id;
             IsArray = isArray;
         }
+
+        public ParamDeclaration()
+        {}
     }
 }

@@ -18,30 +18,26 @@ namespace IronC__Syntax
     public class SyntaxAnalyzer
     {
         private readonly Scanner _scanner;
-        private const int maxT = 35;
-
-        public Errors errors;
-        const int minErrDist = 2;
-        int errDist = minErrDist;
 
         private Symbol _la;
-        private Symbol _t;
 
         public SyntaxAnalyzer(IList<Symbol> input)
         {
             Debug.Assert(input != null);
             _scanner = new Scanner(input);
-            errors = new Errors();
+            Errors = new SyntaxErrors();
         }
 
         public ITree Analyze()
         {
+            Errors.Clear();
             _la = null;
+
             Get();
             var p = C__();
             Expect(Terminals.EOF);
 
-            if (errors.count == 0)
+            if (Errors.Count == 0)
             {
                 var tree = new Tree();
                 tree.AddRoot(p);
@@ -152,29 +148,19 @@ namespace IronC__Syntax
 
         #region Errors
 
-        void SynErr(int n)
-        {
-            if (errDist >= minErrDist) errors.SynErr(/*_la.line, _la.col*/0, 0, n);
-            errDist = 0;
-        }
+        public SyntaxErrors Errors { get; private set; }
 
-        public void SemErr(string msg)
+        void SynErr(int errnum)
         {
-            if (errDist >= minErrDist) errors.SemErr(/*t.line, t.col*/0, 0, msg);
-            errDist = 0;
+            Errors.SynErr(_la.GetRowNumber(), errnum);
         }
 
         #endregion
 
+        #region Grammar
+
         void Get()
         {
-            //for (; ; )
-            //{
-            //    _t = _la;
-            //    _la = _scanner.Scan();
-            //    if (true) { ++errDist; break; }
-            //    _la = _t;
-            //}
             _la = _scanner.Scan();
         }
 
@@ -187,7 +173,7 @@ namespace IronC__Syntax
                 Get();
             }
             else
-                SynErr(/*n*/0);
+                SynErr(Terminals.OrderNums[n]);
             return r;
         }
 
@@ -510,87 +496,7 @@ namespace IronC__Syntax
             }
             return new GetValueExpression(id);
         }
+
+        #endregion
     }
-
-    public class Errors
-    {
-        public int count = 0;                                    // number of errors detected
-        public System.IO.TextWriter errorStream = Console.Out;   // error messages go to this stream
-        public string errMsgFormat = "-- line {0} col {1}: {2}"; // 0=line, 1=column, 2=text
-
-        public virtual void SynErr(int line, int col, int n)
-        {
-            string s;
-            switch (n)
-            {
-                case 0: s = "EOF expected"; break;
-                case 1: s = "ident expected"; break;
-                case 2: s = "number expected"; break;
-                case 3: s = "int expected"; break;
-                case 4: s = "char expected"; break;
-                case 5: s = "semicolon expected"; break;
-                case 6: s = "lpar expected"; break;
-                case 7: s = "rpar expected"; break;
-                case 8: s = "assign expected"; break;
-                case 9: s = "lbrace expected"; break;
-                case 10: s = "rbrace expected"; break;
-                case 11: s = "\",\" expected"; break;
-                case 12: s = "\"{\" expected"; break;
-                case 13: s = "\"}\" expected"; break;
-                case 14: s = "\"return\" expected"; break;
-                case 15: s = "\"read\" expected"; break;
-                case 16: s = "\"write\" expected"; break;
-                case 17: s = "\"writeln\" expected"; break;
-                case 18: s = "\"break\" expected"; break;
-                case 19: s = "\"if\" expected"; break;
-                case 20: s = "\"else\" expected"; break;
-                case 21: s = "\"while\" expected"; break;
-                case 22: s = "\"-\" expected"; break;
-                case 23: s = "\"!\" expected"; break;
-                case 24: s = "\"+\" expected"; break;
-                case 25: s = "\"*\" expected"; break;
-                case 26: s = "\"/\" expected"; break;
-                case 27: s = "\"==\" expected"; break;
-                case 28: s = "\"!=\" expected"; break;
-                case 29: s = "\"<\" expected"; break;
-                case 30: s = "\"<=\" expected"; break;
-                case 31: s = "\">\" expected"; break;
-                case 32: s = "\">=\" expected"; break;
-                case 33: s = "\"&&\" expected"; break;
-                case 34: s = "\"||\" expected"; break;
-                case 35: s = "??? expected"; break;
-                case 36: s = "invalid Type"; break;
-                case 37: s = "invalid Smth"; break;
-                case 38: s = "invalid SimExpr"; break;
-                case 39: s = "invalid BinaryOp"; break;
-                case 40: s = "invalid UnaryOp"; break;
-
-                default: s = "error " + n; break;
-            }
-            errorStream.WriteLine(errMsgFormat, line, col, s);
-            count++;
-        }
-
-        public virtual void SemErr(int line, int col, string s)
-        {
-            errorStream.WriteLine(errMsgFormat, line, col, s);
-            count++;
-        }
-
-        public virtual void SemErr(string s)
-        {
-            errorStream.WriteLine(s);
-            count++;
-        }
-
-        public virtual void Warning(int line, int col, string s)
-        {
-            errorStream.WriteLine(errMsgFormat, line, col, s);
-        }
-
-        public virtual void Warning(string s)
-        {
-            errorStream.WriteLine(s);
-        }
-    } // Errors
 }

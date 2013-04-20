@@ -9,8 +9,8 @@ namespace IronC__Common.Syntax.Expressions
 {
     public class UnaryExpression: Expression
     {
-        public Terminal Operator { get; private set; }
-        public Expression Expression { get; private set; }
+        public Terminal Operator { get; set; }
+        public Expression Expression { get; set; }
 
         public UnaryExpression(Terminal op, Expression expression)
         {
@@ -19,5 +19,8 @@ namespace IronC__Common.Syntax.Expressions
             AddAttribute(new OperatorAttr(op));
             AddChild(expression);
         }
+
+        public UnaryExpression()
+        {}
     }
 }

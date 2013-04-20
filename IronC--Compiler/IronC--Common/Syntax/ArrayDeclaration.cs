@@ -9,7 +9,7 @@ namespace IronC__Common.Syntax
 {
     public class ArrayDeclaration: VarDeclaration
     {
-        public Num Size { get; private set; }
+        public Num Size { get; set; }
 
         public ArrayDeclaration(Terminal type, Id id, Num size)
             :base(type, id)
@@ -17,5 +17,8 @@ namespace IronC__Common.Syntax
             Size = size;
             AddAttribute(new NumAttr(size));
         }
+
+        public ArrayDeclaration()
+        {}
     }
 }

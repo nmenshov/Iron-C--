@@ -9,9 +9,9 @@ namespace IronC__Common.Syntax
 {
     public class IfStatement: Statement
     {
-        public Expression Condition { get; private set; }
-        public Statement TrueStatement { get; private set; }
-        public Statement FalseStatement { get; private set; }
+        public Expression Condition { get; set; }
+        public Statement TrueStatement { get; set; }
+        public Statement FalseStatement { get; set; }
 
         public IfStatement(Expression condition, Statement trueStatement, Statement falseStatement)
         {
@@ -23,5 +23,8 @@ namespace IronC__Common.Syntax
             AddChild(trueStatement);
             AddChild(falseStatement);
         }
+
+        public IfStatement()
+        {}
     }
 }

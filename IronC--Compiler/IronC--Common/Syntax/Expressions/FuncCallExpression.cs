@@ -9,8 +9,8 @@ namespace IronC__Common.Syntax.Expressions
 {
     public class FuncCallExpression: Expression
     {
-        public Id Func { get; private set; }
-        public Expression[] Params { get; private set; }
+        public Id Func { get; set; }
+        public Expression[] Params { get; set; }
 
         public FuncCallExpression(Id func, Expression[] parameters)
         {
@@ -19,5 +19,8 @@ namespace IronC__Common.Syntax.Expressions
             AddAttribute(new IdAttr(func));
             AddChildren(parameters);
         }
+
+        public FuncCallExpression()
+        {}
     }
 }
