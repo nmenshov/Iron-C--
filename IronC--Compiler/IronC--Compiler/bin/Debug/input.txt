@@ -27,7 +27,7 @@ X3
 J
 N
 U
-33
+34
 int
 char
 ;
@@ -61,6 +61,7 @@ while
 =
 number
 letter
+,
 69
 Z V F
 V W V

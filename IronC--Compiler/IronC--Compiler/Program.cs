@@ -83,7 +83,7 @@ namespace IronC__Compiler
                                                 int main()
                                                 {
                                                     int i;int n;
-                                                    int a;int b;
+                                                    int a,int b;
                                                     while (i <= n)
                                                     a = 3+a+b;
                                                     a = 3+a;
