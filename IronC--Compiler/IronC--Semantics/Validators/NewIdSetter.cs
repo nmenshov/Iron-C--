@@ -25,7 +25,7 @@ namespace IronC__Semantics.Validators
 
         protected override void OperationBefore(INode parent, INode current, ref object data)
         {
-            if (current.GetType() == typeof (VarDeclaration))
+            if (current.GetType() == typeof(VarDeclaration))
             {
                 var find = current.Attribute.FirstOrDefault(x => x.GetType() == typeof (IdAttr)) as IdAttr;
                 var type = current.Attribute.FirstOrDefault(x => x.GetType() == typeof(TypeAttr)) as TypeAttr;

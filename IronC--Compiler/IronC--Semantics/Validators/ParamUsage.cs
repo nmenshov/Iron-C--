@@ -34,6 +34,22 @@ namespace IronC__Semantics.Validators
                         _errors.Add(string.Format("Повторное объявление переменной {0}, строка {1}", declaration.Id.Value, declaration.Id.GetRowNumber()));
                     }
                 }
+
+                var array =
+                    current.Children.Where(x => x.GetType() == typeof(ArrayDeclaration))
+                           .Select(x => x as ArrayDeclaration)
+                           .ToList();
+
+                foreach (var declaration in array)
+                {
+                    if (data.Count(x => x.IsEqual(declaration.Id.Value)) == 0)
+                        data.Add(declaration.Id);
+                    else
+                    {
+                        _errors.Add(string.Format("Повторное объявление переменной {0}, строка {1}", declaration.Id.Value, declaration.Id.GetRowNumber()));
+                    }
+                }
+
             }
 
             if (current.GetType() == typeof(FuncDeclaration))
@@ -60,7 +76,7 @@ namespace IronC__Semantics.Validators
                     _errors.Add(string.Format("Функция не возвращает значение {0}, строка {1}", id.Id.Value, id.Id.GetRowNumber()));
                 }
             }
-            if (current.GetType() != typeof(FuncDeclaration) && current.GetType() != typeof(VarDeclaration))
+            if (current.GetType() != typeof(FuncDeclaration) && current.GetType() != typeof(VarDeclaration) && current.GetType() != typeof(ArrayDeclaration))
             {
                 var find = current.Attribute.FirstOrDefault(x => x.GetType() == typeof(IdAttr)) as IdAttr;
                 if (find != null)
@@ -82,6 +98,14 @@ namespace IronC__Semantics.Validators
                 var param = current.Children.Where(x => x.GetType() == typeof(VarDeclaration)).Select(x => x as VarDeclaration).ToList();
 
                 foreach (var declaration in param)
+                {
+                    if (data.Count(x => x.IsEqual(declaration.Id.Value)) != 0)
+                        data.RemoveAll(x => x.Value == declaration.Id.Value);
+                }
+
+                var array = current.Children.Where(x => x.GetType() == typeof(ArrayDeclaration)).Select(x => x as ArrayDeclaration).ToList();
+
+                foreach (var declaration in array)
                 {
                     if (data.Count(x => x.IsEqual(declaration.Id.Value)) != 0)
                         data.RemoveAll(x => x.Value == declaration.Id.Value);
