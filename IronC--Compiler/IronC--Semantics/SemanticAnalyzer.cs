@@ -22,7 +22,8 @@ namespace IronC__Semantics
                 {                    
                     new UniqueValidator(),
                     new NewIdSetter(),
-                    new ParamUsage()
+                    new ParamUsage(),
+                    new TypeValidator()
                 };
         }
 

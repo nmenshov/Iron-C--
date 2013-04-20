@@ -18,5 +18,6 @@ namespace IronC__Common.Syntax
     [XmlInclude(typeof(UnaryExpression))]
     public abstract class Expression: Statement
     {
+        public bool IsTypeChecked { get; set; }
     }
 }

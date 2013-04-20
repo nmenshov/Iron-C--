@@ -9,7 +9,7 @@ using IronC__Common.Trees;
 
 namespace IronC__Common.Syntax
 {
-    class TypeAttr: IAttribute
+    public class TypeAttr: IAttribute
     {
         [XmlIgnore]
         public string Name { get; set; }

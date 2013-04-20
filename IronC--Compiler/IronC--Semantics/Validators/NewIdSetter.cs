@@ -9,15 +9,14 @@ using IronC__Common.Trees;
 
 namespace IronC__Semantics.Validators
 {
-    public class NewIdSetter:RecursionValidator<object>
+    public class NewIdSetter : RecursionValidator<object>
     {
-        private Dictionary<string, int> _currentId;
+        private Dictionary<string, VarParam> _currentId;
 
         public NewIdSetter()
         {
-            _currentId = new Dictionary<string, int>();
+            _currentId = new Dictionary<string, VarParam>();
         }
-
 
         protected override object GetStartValue()
         {
@@ -26,36 +25,43 @@ namespace IronC__Semantics.Validators
 
         protected override void OperationBefore(INode parent, INode current, ref object data)
         {
-            if (current.GetType() == typeof(VarDeclaration))
+            if (current.GetType() == typeof (VarDeclaration))
             {
-                var find = current.Attribute.FirstOrDefault(x => x.GetType() == typeof(IdAttr)) as IdAttr;
-               
+                var find = current.Attribute.FirstOrDefault(x => x.GetType() == typeof (IdAttr)) as IdAttr;
+                var type = current.Attribute.FirstOrDefault(x => x.GetType() == typeof(TypeAttr)) as TypeAttr;
+
                 if (_currentId.ContainsKey(find.Id.Value))
                 {
-                    _currentId[find.Id.Value]+=1;
-                    find.NewId = _currentId[find.Id.Value];
+                    _currentId[find.Id.Value].Value += 1;
+                    find.NewId = _currentId[find.Id.Value].Value;
                 }
                 else
                 {
-                    _currentId.Add(find.Id.Value, 0);
+                    _currentId.Add(find.Id.Value, new VarParam(type));
                     find.NewId = 0;
                 }
             }
 
-            if (current.GetType() == typeof(FuncDeclaration))
+            if (current.GetType() == typeof (FuncDeclaration))
             {
 
-                var find = current.Attribute.FirstOrDefault(x => x.GetType() == typeof(ParamDeclaration)) as ParamDeclaration;
+                var find =
+                    current.Attribute.FirstOrDefault(x => x.GetType() == typeof (ParamDeclaration)) as ParamDeclaration;
+                var find2 =
+                    current.Attribute.FirstOrDefault(x => x.GetType() == typeof(IdAttr)) as IdAttr;
+                var find3 =
+                    current.Attribute.FirstOrDefault(x => x.GetType() == typeof(TypeAttr)) as TypeAttr;
+                _currentId.Add(find2.Id.Value, new VarParam(new TypeAttr(find3.Type)));
                 if (find != null)
                 {
                     if (_currentId.ContainsKey(find.Id.Value))
                     {
-                        _currentId[find.Id.Value] += 1;
-                        find.NewId = _currentId[find.Id.Value];
+                        _currentId[find.Id.Value].Value += 1;
+                        find.NewId = _currentId[find.Id.Value].Value;
                     }
                     else
                     {
-                        _currentId.Add(find.Id.Value, 0);
+                        _currentId.Add(find.Id.Value, new VarParam(new TypeAttr(find.Type)));
                         find.NewId = 0;
                     }
                 }
@@ -63,13 +69,13 @@ namespace IronC__Semantics.Validators
 
             if (current.GetType() != typeof (FuncDeclaration))
             {
-                var find = current.Attribute.FirstOrDefault(x => x.GetType() == typeof(IdAttr)) as IdAttr;
+                var find = current.Attribute.FirstOrDefault(x => x.GetType() == typeof (IdAttr)) as IdAttr;
                 if (find != null)
                 {
                     if (_currentId.ContainsKey(find.Id.Value))
                     {
-                        find.NewId = _currentId[find.Id.Value];
-                        
+                        find.NewId = _currentId[find.Id.Value].Value;
+                        current.AddAttribute(_currentId[find.Id.Value].VType);
                     }
                 }
             }
@@ -77,12 +83,22 @@ namespace IronC__Semantics.Validators
 
         protected override void OperationAfter(INode parent, INode current, ref object data)
         {
-            
-        }
 
-        private int FindDeclaration(INode current)
+        }
+    }
+
+
+    internal class VarParam
+    {
+        public int Value { get; set; }
+        public TypeAttr VType { get; set; }
+
+        public VarParam(TypeAttr type)
         {
-            return 0;
+            Value = 0;
+            VType = type;
         }
     }
 }
+
+

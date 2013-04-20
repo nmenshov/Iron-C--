@@ -18,7 +18,6 @@ namespace IronC__Semantics.Validators
 
         protected override void OperationBefore(INode parent, INode current, ref List<Id> data)
         {
-
             if (current.GetType() == typeof(Program) || current.GetType() == typeof(Block))
             {
                 var param =
@@ -43,6 +42,7 @@ namespace IronC__Semantics.Validators
                     current.Attribute.Where(x => x.GetType() == typeof(ParamDeclaration))
                            .Select(x => x as ParamDeclaration)
                            .ToList();
+                data.Add(((IdAttr)current.Attribute.First(x=>x.GetType()==typeof(IdAttr))).Id);
                 foreach (var declaration in param)
                 {
                     if (data.Count(x => x.IsEqual(declaration.Id.Value)) == 0)
@@ -52,8 +52,14 @@ namespace IronC__Semantics.Validators
                         _errors.Add(string.Format("Повторное объявление переменной {0}, строка {1}", declaration.Id.Value, declaration.Id.GetRowNumber()));
                     }
                 }
-            }
 
+                var ret = current.Children[0].Children.FirstOrDefault(x => x.GetType() == typeof (ReturnStatement));
+                if (ret == null)
+                {
+                    var id = current.Children.First(x => x.GetType() == typeof(IdAttr)) as IdAttr;
+                    _errors.Add(string.Format("Функция не возвращает значение {0}, строка {1}", id.Id.Value, id.Id.GetRowNumber()));
+                }
+            }
             if (current.GetType() != typeof(FuncDeclaration) && current.GetType() != typeof(VarDeclaration))
             {
                 var find = current.Attribute.FirstOrDefault(x => x.GetType() == typeof(IdAttr)) as IdAttr;
