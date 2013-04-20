@@ -80,18 +80,11 @@ namespace IronC__Compiler
 
                     var la3 = new LexicalAnalyzer(grammar3, "LA.xml");
                     var tokens3 = la3.Convert(@"
-                                                int func()
-                                                {return 3;}
-
-                                                int func(int е)
-                                                {return 3;}
-
                                                 int main()
                                                 {
-                                                    char a;
-                                                    int b;
-                                                    a = func();
-                                                    b = func();
+                                                    int i;int n;
+                                                    int a;int b;
+                                                    while (i <= n)
                                                     a = 3+a+b;
                                                     a = 3+a;
                                                     a = -b;
