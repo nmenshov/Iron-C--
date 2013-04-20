@@ -12,12 +12,12 @@ namespace IronC__Semantics
     {
         private ITree _tree;
         private List<IValidator> _validators;
-        private List<string> _erros;
+        public List<string> Errors { get; private set; }
 
         public SemanticAnalyzer(ITree tree)
         {
             _tree = tree;
-            _erros = new List<string>();
+            Errors = new List<string>();
             _validators = new List<IValidator>()
                 {                    
                     new UniqueValidator(),
@@ -30,7 +30,7 @@ namespace IronC__Semantics
         public void DecorateAndValidateTree()
         {            
             if(_tree!=null)
-                _validators.ForEach(x=>_erros.AddRange(x.Validate(_tree)));
+                _validators.ForEach(x=>Errors.AddRange(x.Validate(_tree)));
         }
     }
 }

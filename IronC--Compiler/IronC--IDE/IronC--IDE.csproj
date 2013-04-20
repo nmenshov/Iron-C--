@@ -34,8 +34,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GalaSoft.MvvmLight.Extras.WPF4, Version=4.0.23.37706, Culture=neutral, PublicKeyToken=1673db7d5906b0ad, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\GalaSoft.MvvmLight.Extras.WPF4.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.WPF4, Version=4.0.23.37706, Culture=neutral, PublicKeyToken=63eb5c012e0b3c1c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\GalaSoft.MvvmLight.WPF4.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -53,6 +65,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="ErrorsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -61,6 +77,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ErrorsView.xaml.cs">
+      <DependentUpon>ErrorsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -92,6 +112,33 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="GalaSoft.MvvmLight.Extras.WPF4.dll" />
+    <Content Include="GalaSoft.MvvmLight.WPF4.dll" />
+    <Content Include="System.Windows.Interactivity.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IronC--Common\IronC--Common.csproj">
+      <Project>{c242a6bd-124c-4c54-995d-01379ff4f1e8}</Project>
+      <Name>IronC--Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IronC--Generator\IronC--Generator.csproj">
+      <Project>{ea97caa9-de96-4786-b2d5-c94300be7e23}</Project>
+      <Name>IronC--Generator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IronC--Lexical\IronC--Lexical.csproj">
+      <Project>{1d620bc3-9b4f-4421-8e63-a21beb709c25}</Project>
+      <Name>IronC--Lexical</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IronC--Semantics\IronC--Semantics.csproj">
+      <Project>{5714ac39-d06b-44ae-9e3f-4220440b7174}</Project>
+      <Name>IronC--Semantics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IronC--Syntax\IronC--Syntax.csproj">
+      <Project>{eb0074a6-77d7-4744-a324-cc5e36fb0cfd}</Project>
+      <Name>IronC--Syntax</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -10,25 +10,23 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace IronC__IDE
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for ErrorsView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ErrorsView : Window
     {
-        public MainWindow()
+        public ErrorsView()
         {
             InitializeComponent();
-            DataContext = new MainViewModel();
         }
 
-        private void Window_Closed(object sender, EventArgs e)
+        public void SetErrors(List<string> errors)
         {
-            App.Current.Shutdown();
+            _errors.ItemsSource = errors;
         }
     }
 }

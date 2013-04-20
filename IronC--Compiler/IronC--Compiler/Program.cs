@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,109 +14,57 @@ namespace IronC__Compiler
 {
     class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            Console.WriteLine("1. Lexical");
-            Console.WriteLine("2. Syntax");
-            Console.WriteLine("3. Semantics");
-            Console.WriteLine("4. CodeGen");
-            Console.Write("Input: ");
-            //int choose =  Convert.ToInt32(Console.ReadLine());
-            int choose = 2;
-
-            switch (choose)
+            if (!args.Any())
             {
-                case 1:
-                    var reader = new Reader("input.txt");
-                    var grammar = reader.ReadGrammar();
-
-                    var la = new LexicalAnalyzer(grammar, "LA.xml");
-
-                    var tokens = la.Convert(@"
-                                                int func()
-                                                {
-                                                    return 4;
-                                                }
-
-                                                int main()
-                                                {
-                                                char a = func();
-                                                write a;
-                                                read a;
-                                                a = a + 3;
-                                                write a;
-                                                return 0;
-                                                }");
-                    break;
-
-                case 2:
-                    var reader2 = new Reader("input.txt");
-                    var grammar2 = reader2.ReadGrammar();
-
-                    var la2 = new LexicalAnalyzer(grammar2, "LA.xml");
-                    var tokens2 = la2.Convert(@"char c;
-                                                int main() {
-                                                  int x;
-                                                  int y;
-  
-                                                  x = 0;
-                                                  y = 5;
-
-                                                  while (x < y) {
-                                                    write x;
-                                                    writeln;
-                                                    x = x + 1;
-                                                  }
-                                                }");
-                    var syn = new SyntaxAnalyzer(tokens2);
-                    var tree = syn.Analyze();
-                    //(tree.Root as IronC__Common.Syntax.Program).Serialize(@"G:\tree.txt");
-                    break;
-
-                case 3:
-                    break;
-
-                case 4:
-                    var reader3 = new Reader("input.txt");
-                    var grammar3 = reader3.ReadGrammar();
-
-                    var la3 = new LexicalAnalyzer(grammar3, "LA.xml");
-                    var tokens3 = la3.Convert(@"
-                                                int func()
-                                                {return 3;}
-                                                int main()
-                                                {
-                                                    char a;
-                                                    int b;
-                                                    a = main();
-                                                    b = main();
-                                                    a = 3+a+b;
-                                                    a = 3+a;
-                                                    a = -b;
-                                                    a = -a;
-                                                    a = a + 3 * a;
-                                                    if(a>b) a=2; else a=4;
-                                                    write a;                                               
-                                                    read a;
-                                                    a = a + 3;
-                                                    write a;
-                                                    return 0;
-                                                }");
-                    var syn3 = new SyntaxAnalyzer(tokens3);
-                    var tree3 = syn3.Analyze();
-
-                    var sem = new SemanticAnalyzer(tree3);
-                    sem.DecorateAndValidateTree();
-
-                    var gen = new CodeGenerator(tree3);
-                    gen.Generate("app.exe");
-                    break;
-
-                default:
-                    Console.WriteLine("Error");
-                    break;
+                Console.WriteLine("There is no file to compile.");
+                return;
             }
-            //Console.ReadKey();
+
+            var fileName = args.First();
+            if (!File.Exists(fileName))
+            {
+                Console.WriteLine("There is no file to compile.");
+                return;
+            }
+
+            string program;
+            using (var fr = new StreamReader(File.Open(fileName, FileMode.Open)))
+            {
+                program = fr.ReadToEnd();
+            }
+
+            var reader = new Reader("input.txt");
+            var grammar = reader.ReadGrammar();
+
+            var lexical = new LexicalAnalyzer(grammar, "LA.xml");
+            var tokens = lexical.Convert(program);
+
+            var syntax = new SyntaxAnalyzer(tokens);
+            var tree = syntax.Analyze();
+
+            if (ReportError(syntax.Errors))
+                return;
+
+            var semantics = new SemanticAnalyzer(tree);
+            semantics.DecorateAndValidateTree();
+
+            if (ReportError(semantics.Errors))
+                return;
+
+            var gen = new CodeGenerator(tree);
+            gen.Generate(Path.GetFileNameWithoutExtension(fileName) + ".exe");
+        }
+
+        private static bool ReportError(List<string> errors)
+        {
+            if (errors.Any())
+            {
+                errors.ForEach(Console.WriteLine);
+                return true;
+            }
+            return false;
         }
     }
 }

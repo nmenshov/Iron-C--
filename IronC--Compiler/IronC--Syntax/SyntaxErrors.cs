@@ -16,16 +16,16 @@ namespace IronC__Syntax
             switch (n)
             {
                 case 0: s = "EOF expected"; break;
-                case 1: s = "ident expected"; break;
+                case 1: s = "identifier expected"; break;
                 case 2: s = "number expected"; break;
                 case 3: s = "int expected"; break;
                 case 4: s = "char expected"; break;
-                case 5: s = "semicolon expected"; break;
-                case 6: s = "lpar expected"; break;
-                case 7: s = "rpar expected"; break;
-                case 8: s = "assign expected"; break;
-                case 9: s = "lbrace expected"; break;
-                case 10: s = "rbrace expected"; break;
+                case 5: s = "; expected"; break;
+                case 6: s = "( expected"; break;
+                case 7: s = ") expected"; break;
+                case 8: s = "= expected"; break;
+                case 9: s = "[ expected"; break;
+                case 10: s = "] expected"; break;
                 case 11: s = "\",\" expected"; break;
                 case 12: s = "\"{\" expected"; break;
                 case 13: s = "\"}\" expected"; break;
@@ -52,10 +52,10 @@ namespace IronC__Syntax
                 case 34: s = "\"||\" expected"; break;
                 case 35: s = "??? expected"; break;
                 case 36: s = "invalid Type"; break;
-                case 37: s = "invalid Smth"; break;
-                case 38: s = "invalid SimExpr"; break;
-                case 39: s = "invalid BinaryOp"; break;
-                case 40: s = "invalid UnaryOp"; break;
+                case 37: s = "invalid Statement"; break;
+                case 38: s = "invalid Simple expression"; break;
+                case 39: s = "invalid Binary operator"; break;
+                case 40: s = "invalid Unary operator"; break;
 
                 default: s = "error " + n; break;
             }
