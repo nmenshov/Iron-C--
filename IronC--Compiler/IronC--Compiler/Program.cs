@@ -98,6 +98,8 @@ namespace IronC__Compiler
                                                 a = b+c;
                                                 write a;                                               
                                                 read a;
+                                                a = a + 3;
+                                                write a;
                                                 return 0;
                                                 }");
                     var syn3 = new SyntaxAnalyzer(tokens3);
