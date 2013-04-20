@@ -12,6 +12,7 @@ namespace IronC__Common.Lexis
     {
         public string Name { get; set; }
         public readonly SymbolType Type;
+        private int _rowNumber;
 
         public Symbol()
         {
@@ -21,6 +22,16 @@ namespace IronC__Common.Lexis
         {
             Name = name;
             Type = type;
+        }
+
+        public void SetRowNumber(int number)
+        {
+            _rowNumber = number;
+        }
+
+        public int GetRowNumber()
+        {
+            return _rowNumber;
         }
 
         public virtual bool IsEqual(string str)

@@ -19,6 +19,9 @@ namespace IronC__Common.Syntax
         public Terminal Type { get; private set; }
         public Id Id { get; private set; }
         public bool IsArray { get; private set; }
+        public int NewId { get; set; }
+
+        public string NewValue { get { return Id.Value + NewId; } }
 
         public ParamDeclaration(Terminal type, Id id, bool isArray)
         {

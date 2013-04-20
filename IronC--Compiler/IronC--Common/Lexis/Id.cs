@@ -25,8 +25,14 @@ namespace IronC__Common.Lexis
             id.SetValue(str);
             return id;
         }
+
         public override bool IsEqual(string str)
         {
+            if (Value != null)
+            {
+                return str == Value;
+            }
+
             if (str.Length == 0)
                 return false;
 

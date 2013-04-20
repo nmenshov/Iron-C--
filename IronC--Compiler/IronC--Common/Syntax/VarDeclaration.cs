@@ -10,7 +10,7 @@ namespace IronC__Common.Syntax
 {
     public class VarDeclaration: Node
     {
-        public Terminal Type { get; private set; }
+        public Terminal Type { get; set; }
         public Id Id { get; private set; }
 
         public VarDeclaration(Terminal type, Id id)

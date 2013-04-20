@@ -16,6 +16,7 @@ namespace IronC__Lexical
     {
         private readonly Grammar _grammar;
         private readonly string _output;
+        private int _rowNumber;
 
         public LexicalAnalyzer(Grammar grammar, string output)
         {
@@ -32,10 +33,9 @@ namespace IronC__Lexical
 
             try
             {
+                _rowNumber = 1;
                 string rab = "";
-                string str = input.TrimStart(' ');
-
-                str += " ";
+                string str = input.TrimStart(' ')+" ";
 
                 str = Filter(str);
 
@@ -43,6 +43,7 @@ namespace IronC__Lexical
                 {
                     rab = Parse(rab, symbol, ret);
                 }
+
                 rab = Parse(rab, '.', ret);
             }
             catch (Exception e)
@@ -59,12 +60,17 @@ namespace IronC__Lexical
 
         private string Parse(string rab, char symbol, List<Symbol> ret)
         {
-            if (symbol == '\n' || symbol == '\r' || symbol == '\t')
+            if (symbol == '\r' || symbol == '\t')
                 return rab;
+            if (symbol == '\n')
+            {
+                _rowNumber++;
+                return rab;
+            }
 
             if (symbol == ' ' && rab != "" && IsLetterOrDigit(rab))
             {
-                ret.Add(GetSymbol(rab));
+                ret.Add(GetSymbol(rab, ret));
                 return "";
             }
 
@@ -73,19 +79,19 @@ namespace IronC__Lexical
 
             if (!IsLetterOrDigit(symbol) && IsLetterOrDigit(rab) && rab.Length > 0)
             {
-                ret.Add(GetSymbol(rab));
+                ret.Add(GetSymbol(rab, ret));
                 rab = "";
             }
             if (IsLetterOrDigit(symbol) && !IsLetterOrDigit(rab) && rab.Length > 0)
             {
-                ret.Add(GetSymbol(rab));
+                ret.Add(GetSymbol(rab, ret));
                 rab = "";
             }
             else if (!IsLetterOrDigit(symbol) && !IsLetterOrDigit(rab) && rab.Length > 0)
             {
-                var value = GetSymbol(rab + symbol);
+                var value = GetSymbol(rab + symbol, ret);
 
-                ret.Add(value ?? GetSymbol(rab));
+                ret.Add(value ?? GetSymbol(rab, ret));
 
                 rab = "";
             }
@@ -127,13 +133,15 @@ namespace IronC__Lexical
             return b.ToString();
         }
 
-        public Symbol GetSymbol(string str)
+        public Symbol GetSymbol(string str, List<Symbol> current)
         {
+            
             var element = _grammar.Terminals.Find(x => x.IsEqual(str));
             if (element == null)
                 return null;
 
             var ret = element.GetCopy(str);
+            ret.SetRowNumber(_rowNumber);
             return ret;
         }
 

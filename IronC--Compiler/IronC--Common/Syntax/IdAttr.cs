@@ -8,7 +8,7 @@ using IronC__Common.Trees;
 
 namespace IronC__Common.Syntax
 {
-    class IdAttr:IAttribute 
+    public class IdAttr:IAttribute 
     {
         public string Name { get; private set; }
         public bool IsEqual(string name, object value)
@@ -17,6 +17,10 @@ namespace IronC__Common.Syntax
         }
 
         public Id Id { get; private set; }
+
+        public int NewId { get; set; }
+
+        public string NewValue { get { return Id.Value + NewId; } }
 
         public IdAttr(Id id)
         {

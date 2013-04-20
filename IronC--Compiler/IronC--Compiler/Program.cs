@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using IronC__Common;
 using IronC__Generator;
 using IronC__Lexical;
+using IronC__Semantics;
 using IronC__Syntax;
 
 namespace IronC__Compiler
@@ -20,7 +21,7 @@ namespace IronC__Compiler
             Console.WriteLine("4. CodeGen");
             Console.Write("Input: ");
             //int choose =  Convert.ToInt32(Console.ReadLine());
-            int choose = 1;
+            int choose = 4;
 
             switch (choose)
             {
@@ -77,24 +78,33 @@ namespace IronC__Compiler
                     var reader3 = new Reader("input.txt");
                     var grammar3 = reader3.ReadGrammar();
 
-                    var la3 = new LexicalAnalyzer(grammar3, "LA");
-                    var tokens3 = la3.Convert(@"
-                                                int func()
+                    var la3 = new LexicalAnalyzer(grammar3, "LA.xml");
+                    var tokens3 = la3.Convert(@"int func(int b)
                                                 {
-                                                    return 4;
+                                                    {
+                                                        int c;
+                                                        c=b;
+                                                    }
+                                                    b = c+2;
+                                                    return 0;
                                                 }
-
+                                                 
                                                 int main()
                                                 {
-                                                char a = func();
-                                                write a;
+                                                char a;
+                                                {int b;}
+                                                {int b;}
+                                                a = 3 + 3;
+                                                a = b+c;
+                                                write a;                                               
                                                 read a;
-                                                a = a + 3;
-                                                write a;
                                                 return 0;
                                                 }");
                     var syn3 = new SyntaxAnalyzer(tokens3);
                     var tree3 = syn3.Analyze();
+
+                    var sem = new SemanticAnalyzer(tree3);
+                    sem.DecorateAndValidateTree();
 
                     var gen = new CodeGenerator(tree3);
                     gen.Generate("app.exe");
