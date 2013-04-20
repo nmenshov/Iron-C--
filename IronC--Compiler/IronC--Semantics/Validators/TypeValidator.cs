@@ -43,10 +43,11 @@ namespace IronC__Semantics.Validators
 
         private void CheckSetValueExpresion(SetValueExpression expr)
         {
-            var attr = expr.Attribute.First(x => x.GetType() == typeof (TypeAttr)) as TypeAttr;
-            var attr2 = expr.Attribute.First(x => x.GetType() == typeof(IdAttr)) as IdAttr;
+            var attr = expr.Attribute.FirstOrDefault(x => x.GetType() == typeof (TypeAttr)) as TypeAttr;
+            var attr2 = expr.Attribute.FirstOrDefault(x => x.GetType() == typeof(IdAttr)) as IdAttr;
+
             string check = Check(expr.Children[0]);
-            if (!IsEqual(attr.Type.Name, check))
+            if ( attr==null || attr2==null ||!IsEqual(attr.Type.Name, check))
             {
                 _errors.Add(string.Format("Ошибка в выражении, строка {0}", attr2.Id.GetRowNumber()));
             }

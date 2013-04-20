@@ -51,7 +51,17 @@ namespace IronC__Semantics.Validators
                     current.Attribute.FirstOrDefault(x => x.GetType() == typeof(IdAttr)) as IdAttr;
                 var find3 =
                     current.Attribute.FirstOrDefault(x => x.GetType() == typeof(TypeAttr)) as TypeAttr;
-                _currentId.Add(find2.Id.Value, new VarParam(new TypeAttr(find3.Type)));
+
+                if (_currentId.ContainsKey(find2.Id.Value))
+                {
+                    _errors.Add(string.Format("Повторное объявление функции {0}, строка {1}", find2.Id.Value, find2.Id.GetRowNumber()));
+                }
+                else
+                {
+                    _currentId.Add(find2.Id.Value, new VarParam(new TypeAttr(find3.Type)));
+                    find2.NewId = 0;
+                }
+                
                 if (find != null)
                 {
                     if (_currentId.ContainsKey(find.Id.Value))

@@ -91,9 +91,16 @@ namespace IronC__Lexical
             {
                 var value = GetSymbol(rab + symbol, ret);
 
-                ret.Add(value ?? GetSymbol(rab, ret));
-
-                rab = "";
+                if (value != null)
+                {
+                    ret.Add(value);
+                    return "";
+                }
+                else
+                {
+                    ret.Add(GetSymbol(rab, ret));
+                    rab = "";
+                }
             }
 
             if (symbol != ' ')

@@ -27,7 +27,7 @@ X3
 J
 N
 U
-33
+34
 int
 char
 ;
@@ -59,6 +59,7 @@ while
 &&
 ||
 =
+,
 number
 letter
 69
