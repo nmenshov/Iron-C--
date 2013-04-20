@@ -82,12 +82,16 @@ namespace IronC__Compiler
                     var tokens3 = la3.Convert(@"
                                                 int func()
                                                 {return 3;}
+
+                                                int func(int е)
+                                                {return 3;}
+
                                                 int main()
                                                 {
                                                     char a;
                                                     int b;
-                                                    a = main();
-                                                    b = main();
+                                                    a = func();
+                                                    b = func();
                                                     a = 3+a+b;
                                                     a = 3+a;
                                                     a = -b;
@@ -106,6 +110,7 @@ namespace IronC__Compiler
                     var sem = new SemanticAnalyzer(tree3);
                     sem.DecorateAndValidateTree();
 
+                    var errors = sem.Errors;
                     var gen = new CodeGenerator(tree3);
                     gen.Generate("app.exe");
                     break;
