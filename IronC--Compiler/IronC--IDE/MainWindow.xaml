@@ -3,26 +3,29 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"
-        Title="{Binding Title}" Height="350" Width="525" Closed="Window_Closed">
+        Title="{Binding Title}" Height="800" Width="1376" Closed="Window_Closed">
     
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="KeyDown">
             <cmd:EventToCommand Command="{Binding KeyDownCommand}" PassEventArgsToCommand="True"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    
-    <Grid>
+
+    <Grid FocusManager.FocusedElement="{Binding ElementName=TextEditor}">
         <Grid.RowDefinitions>
             <RowDefinition Height="23"/>
-            <RowDefinition/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="100"/>
         </Grid.RowDefinitions>
         
         <Menu VerticalAlignment="Top">
             <MenuItem Header="_File">
                 <MenuItem Header="_New"
+                          InputGestureText="Ctrl+N"
                           Command="{Binding NewFileCommand}"/>
                 <Separator/>
                 <MenuItem Header="_Load"
+                          InputGestureText="Ctrl+O"
                           Command="{Binding LoadFileCommand}"/>
                 <MenuItem Header="_Save"
                           InputGestureText="Ctrl+S"
@@ -31,6 +34,7 @@
                           Command="{Binding SaveAsCommand}"/>
                 <Separator/>
                 <MenuItem Header="_Exit"
+                          InputGestureText="Alt+F4"
                           Command="{Binding ExitCommand}"/>
             </MenuItem>
             <MenuItem Header="_Compile">
@@ -40,14 +44,19 @@
                 <MenuItem Header="_Run"
                           InputGestureText="F5"
                           Command="{Binding RunCommand}"/>
-                <MenuItem Header="_Errors"
-                          Command="{Binding ErrorsCommand}"/>
             </MenuItem>
         </Menu>
 
-        <TextBox Grid.Row="1"
-                 AcceptsReturn="True"
-                 AcceptsTab="True"
-                 Text="{Binding Code, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+        <avalonEdit:TextEditor xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                               Name="TextEditor"
+                               FontFamily="Consolas"
+                               FontSize="10pt"
+                               Grid.Row="1"
+                               Document="{Binding Code, UpdateSourceTrigger=PropertyChanged}" 
+                               ShowLineNumbers="True"/>
+        
+        <ScrollViewer Grid.Row="2">
+            <ListBox ItemsSource="{Binding Errors}"/>
+        </ScrollViewer>
     </Grid>
 </Window>

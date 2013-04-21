@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using ICSharpCode.AvalonEdit.Document;
 using IronC__Common;
 using IronC__Common.Trees;
 using IronC__Generator;
@@ -30,13 +31,11 @@ namespace IronC__IDE
         public RelayCommand SaveFileCommand { get; private set; }
         public RelayCommand SaveAsCommand { get; private set; }
         public RelayCommand ExitCommand { get; private set; }
-        public RelayCommand ErrorsCommand { get; private set; }
 
         private string _lastUsedFileName = string.Empty;
-        private readonly ErrorsView _errorsView;
 
-        private string _code = string.Empty;
-        public string Code
+        private TextDocument _code = new TextDocument();
+        public TextDocument Code
         {
             get { return _code; }
             set
@@ -57,6 +56,17 @@ namespace IronC__IDE
             }
         }
 
+        private IList<string> _errors;
+        public IList<string> Errors
+        {
+            get { return _errors; }
+            set
+            {
+                _errors = value;
+                RaisePropertyChanged(() => Errors);
+            }
+        }
+
         public MainViewModel()
         {
             KeyDownCommand = new RelayCommand<KeyEventArgs>(KeyDownAction);
@@ -67,56 +77,30 @@ namespace IronC__IDE
             SaveFileCommand = new RelayCommand(SaveFileAction);
             SaveAsCommand = new RelayCommand(SaveAsAction);
             ExitCommand = new RelayCommand(ExitAction);
-            ErrorsCommand = new RelayCommand(ErrorsAction);
-            _errorsView = new ErrorsView();
         }
 
         private void CompileAction()
         {
             var tree = Compile();
             if (tree == null)
-            {
-                ErrorsAction();
                 return;
-            }
 
             var gen = new CodeGenerator(tree);
             gen.Generate(Path.GetFileNameWithoutExtension(_lastUsedFileName) + ".exe");
-            MoveFile();
         }
 
         private void RunAction()
         {
             var tree = Compile();
             if (tree == null)
-            {
-                ErrorsAction();
                 return;
-            }
 
             var gen = new CodeGenerator(tree);
             gen.Generate(Path.GetFileNameWithoutExtension(_lastUsedFileName) + ".exe");
-            MoveFile();
             using (var proc = Process.Start(Path.GetFileNameWithoutExtension(_lastUsedFileName) + ".exe"))
             {
                 proc.WaitForExit();
             }
-        }
-
-        private void MoveFile()
-        {
-            //if (Path.GetFileNameWithoutExtension(_lastUsedFileName) + ".exe" == GetExePath())
-            //    return;
-            //if (File.Exists(GetExePath()))
-            //    File.Delete(GetExePath());
-            //File.Move(Path.GetFileNameWithoutExtension(_lastUsedFileName) + ".exe", GetExePath());
-        }
-
-        private string GetExePath()
-        {
-            int fnlen = Path.GetFileName(_lastUsedFileName).Length;
-            var dir = _lastUsedFileName.Remove(_lastUsedFileName.Length - fnlen, fnlen);
-            return Path.Combine(dir, Path.GetFileNameWithoutExtension(_lastUsedFileName) + ".exe");
         }
 
         private ITree Compile()
@@ -125,14 +109,14 @@ namespace IronC__IDE
             var grammar = reader.ReadGrammar();
 
             var lexical = new LexicalAnalyzer(grammar, "LA.xml");
-            var tokens = lexical.Convert(Code);
+            var tokens = lexical.Convert(Code.Text);
 
             var syntax = new SyntaxAnalyzer(tokens);
             var tree = syntax.Analyze();
 
             if (syntax.Errors.Any())
             {
-                _errorsView.SetErrors(syntax.Errors);
+                Errors = syntax.Errors;
                 return null;
             }
 
@@ -141,16 +125,11 @@ namespace IronC__IDE
 
             if (semantics.Errors.Any())
             {
-                _errorsView.SetErrors(semantics.Errors);
+                Errors = semantics.Errors;
                 return null;
             }
 
             return tree;
-        }
-
-        private void ErrorsAction()
-        {
-            _errorsView.Show();
         }
 
         private void KeyDownAction(KeyEventArgs args)
@@ -161,21 +140,25 @@ namespace IronC__IDE
                 CompileAction();
             else if (args.Key == Key.S && ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control))
                 SaveFileAction();
+            else if (args.Key == Key.O && ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control))
+                LoadFileAction();
+            else if (args.Key == Key.N && ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control))
+                NewFileAction();
         }
 
         private void NewFileAction()
         {
-            if (string.IsNullOrEmpty(Code))
+            if (string.IsNullOrEmpty(Code.Text))
                 return;
 
             var res = MessageBox.Show("File isn't saved, save?", "New file", MessageBoxButton.YesNoCancel);
             if (res == MessageBoxResult.Yes)
             {
                 SaveFileAction();
-                Code = string.Empty;
+                Code = new TextDocument();
             }
             else if (res == MessageBoxResult.No)
-                Code = string.Empty;
+                Code = new TextDocument();
         }
 
         private void LoadFileAction()
@@ -190,7 +173,7 @@ namespace IronC__IDE
                 Title = TITLE + " " + Path.GetFileName(_lastUsedFileName);
                 using (var reader = new StreamReader(dlg.OpenFile()))
                 {
-                    Code = reader.ReadToEnd();
+                    Code = new TextDocument(reader.ReadToEnd());
                 }
             }
         }
@@ -219,7 +202,7 @@ namespace IronC__IDE
             Title = TITLE + " " + Path.GetFileName(_lastUsedFileName);
             using (var writer = new StreamWriter(File.Open(fileName, FileMode.Create)))
             {
-                writer.Write(Code);
+                writer.Write(Code.Text);
             }
         }
 

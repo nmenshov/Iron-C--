@@ -2,11 +2,11 @@ int Input(int array[])
 {
 	int n;
 	int i;
-	int c;
 	read n;
 	i = 0;
 	while (i < n)
 	{
+		int c;
 		read c;
 		array[i] = c;
 		i = i + 1;

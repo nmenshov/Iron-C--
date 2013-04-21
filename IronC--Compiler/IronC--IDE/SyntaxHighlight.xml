@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SyntaxDefinition name="C--"
+        xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+
+  <!-- This is the main ruleset. -->
+  <RuleSet>
+    <Keywords fontWeight="bold" foreground="Blue">
+      <Word>if</Word>
+      <Word>else</Word>
+      <Word>int</Word>
+      <Word>char</Word>
+      <Word>while</Word>
+      <Word>read</Word>
+      <Word>return</Word>
+      <Word>write</Word>
+      <Word>writeln</Word>
+      <Word>break</Word>
+    </Keywords>
+
+    <!-- Digits -->
+    <Rule foreground="DarkBlue">
+      \d+
+    </Rule>
+  </RuleSet>
+</SyntaxDefinition>

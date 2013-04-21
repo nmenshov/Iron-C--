@@ -184,7 +184,7 @@ namespace IronC__Generator
 
         private void CodeGetArray(GetArrayValueExpression get, List<LocalVariable> locals, List<GlobalVariable> globals, FuncParam[] parameters, ILGenerator il, List<Function> allFuncs, LocalBuilder tmpVar)
         {
-            var vname = get.Variable.Value;
+            var vname = GetVariableName(get);
             Type t;
             if (locals.Any(x => x.Name == vname))
             {
@@ -215,7 +215,7 @@ namespace IronC__Generator
 
         private void CodeGet(GetValueExpression get, List<LocalVariable> locals, List<GlobalVariable> globals, FuncParam[] parameters, ILGenerator il)
         {
-            var vname = get.Variable.Value;
+            var vname = GetVariableName(get);
             if (locals.Any(x => x.Name == vname))
             {
                 var loc = locals.First(x => x.Name == vname);
@@ -272,7 +272,7 @@ namespace IronC__Generator
 
         private void CodeSetArray(SetArrayValueExpression set, List<LocalVariable> locals, List<GlobalVariable> globals, FuncParam[] parameters, ILGenerator il, List<Function> allFuncs, LocalBuilder tmpVar)
         {
-            var vname = set.Variable.Value;
+            var vname = GetVariableName(set);
             Type t;
             if (locals.Any(x => x.Name == vname))
             {
@@ -309,7 +309,7 @@ namespace IronC__Generator
         {
             CodeExpression(set.Value, locals, globals, parameters, il, allFuncs, tmpVar);
             il.Emit(OpCodes.Dup);
-            var vname = set.Variable.Value;
+            var vname = GetVariableName(set);
             if (locals.Any(x => x.Name == vname))
             {
                 var loc = locals.First(x => x.Name == vname);
@@ -391,7 +391,7 @@ namespace IronC__Generator
             il.Emit(OpCodes.Call, typeof(Console).GetMethod("ReadLine", new Type[0]));
             il.Emit(OpCodes.Call, typeof(Convert).GetMethod("ToInt32", new Type[]{typeof(string)}));
 
-            var vname = readStatement.Id.Value;
+            var vname = GetVariableName(readStatement);
             if (locals.Any(x => x.Name == vname))
             {
                 var loc = locals.First(x => x.Name == vname);
@@ -479,7 +479,7 @@ namespace IronC__Generator
             var list = new List<LocalVariable>();
             foreach (var varDeclaration in block.VarDeclarations)
             {
-                var name = varDeclaration.Id.Value;
+                var name = GetVariableName(varDeclaration);
                 var type = GetVarType(varDeclaration);
                 var info = il.DeclareLocal(type);
 
@@ -540,7 +540,7 @@ namespace IronC__Generator
             for (int i = 0; i < paramDeclarations.Length; i++)
             {
                 var type = GetType(paramDeclarations[i].Type, paramDeclarations[i].IsArray);
-                pars[i] = new FuncParam(paramDeclarations[i].Id.Value, type, i);
+                pars[i] = new FuncParam(paramDeclarations[i].NewValue, type, i);
             }
 
             return pars;
@@ -564,7 +564,7 @@ namespace IronC__Generator
 
             foreach (var declaration in prog.VarDeclarations)
             {
-                var name = declaration.Id.Value;
+                var name = GetVariableName(declaration);
                 var type = GetVarType(declaration);
                 var info = typeBuilder.DefineField(name, type, FieldAttributes.Static);
 
@@ -596,53 +596,10 @@ namespace IronC__Generator
 
         #endregion
 
-        public bool Generate_test(string fileName)
+        private string GetVariableName(INode node)
         {
-            var aName = new AssemblyName(Path.GetFileNameWithoutExtension(fileName));
-            var assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(aName, AssemblyBuilderAccess.RunAndSave);
-
-            ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule(aName.Name, fileName);
-            var tb = moduleBuilder.DefineType("Program");
-            //var mb2 = moduleBuilder.DefineGlobalMethod("A", MethodAttributes.Public | MethodAttributes.Static, typeof (int), new Type[] {typeof (int)});
-            var f = tb.DefineField("_a", typeof (int), FieldAttributes.Static);
-
-            var mb2 = tb.DefineMethod("A", MethodAttributes.Static, typeof (int), new Type[] {typeof (int)});
-
-            var il2 = mb2.GetILGenerator();
-            var v0 = il2.DeclareLocal(typeof (int));
-            il2.Emit(OpCodes.Ldarg_0);
-            il2.Emit(OpCodes.Stloc_0);
-            il2.Emit(OpCodes.Ldloc_0);
-            il2.Emit(OpCodes.Ldc_I4_5);
-            var labIter = il2.DefineLabel();
-            il2.Emit(OpCodes.Bge_S, labIter);
-            il2.Emit(OpCodes.Ldloc_0);
-            il2.Emit(OpCodes.Ldc_I4_1);
-            il2.Emit(OpCodes.Add);
-            il2.Emit(OpCodes.Call, mb2);
-            il2.Emit(OpCodes.Ret);
-            il2.MarkLabel(labIter);
-            il2.Emit(OpCodes.Ldloc_0);
-            il2.Emit(OpCodes.Ret);
-
-            //MethodBuilder mainBuilder = moduleBuilder.DefineGlobalMethod("Main", MethodAttributes.Static | MethodAttributes.Public, typeof(void), new Type[0]);
-            var mainBuilder = tb.DefineMethod("Main", MethodAttributes.Static, typeof (void), new Type[0]);
-            var mainIL = mainBuilder.GetILGenerator();
-            mainIL.Emit(OpCodes.Ldc_I4_0);
-            mainIL.Emit(OpCodes.Stsfld, f);
-            mainIL.Emit(OpCodes.Ldsfld, f);
-            mainIL.Emit(OpCodes.Call, mb2);
-            mainIL.Emit(OpCodes.Call, typeof(System.Console).GetMethod("WriteLine", new Type[] { typeof(int) }));
-            mainIL.Emit(OpCodes.Call, typeof(System.Console).GetMethod("ReadKey", new Type[0]));
-            mainIL.Emit(OpCodes.Pop);
-            mainIL.Emit(OpCodes.Ret);
-
-            //moduleBuilder.CreateGlobalFunctions();
-            tb.CreateType();
-
-            assemblyBuilder.SetEntryPoint(mainBuilder);
-            assemblyBuilder.Save(fileName);
-            return true;
+            var attr = node.Attribute.Single(x => x is IdAttr) as IdAttr;
+            return attr.NewValue;
         }
     }
 }
